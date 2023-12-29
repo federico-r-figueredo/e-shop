@@ -18,7 +18,7 @@ namespace EShop.Services.Ordering.Domain.SeedWork {
         }
 
         public IReadOnlyCollection<INotification> DomainEvents {
-            get { 
+            get {
                 return this.domainEvents;
             }
         }
@@ -41,7 +41,7 @@ namespace EShop.Services.Ordering.Domain.SeedWork {
         }
 
         public override bool Equals(object obj) {
-            if (obj == null|| !(obj is Entity)) {
+            if (obj == null || !(obj is Entity)) {
                 return false;
             }
 
@@ -53,7 +53,7 @@ namespace EShop.Services.Ordering.Domain.SeedWork {
                 return false;
             }
 
-            Entity item = (Entity) obj;
+            Entity item = (Entity)obj;
 
             if (item.IsTransient() || this.IsTransient()) {
                 return false;
