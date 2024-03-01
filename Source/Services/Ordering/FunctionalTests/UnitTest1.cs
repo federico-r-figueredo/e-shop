@@ -1,15 +1,14 @@
-namespace Ordering.FunctionalTests;
+using NUnit.Framework;
 
-public class Tests
-{
-    [SetUp]
-    public void Setup()
-    {
-    }
+namespace Ordering.UnitTests {
+    public class Tests {
+        [SetUp]
+        public void Setup() {
+        }
 
-    [Test]
-    public void Test1()
-    {
-        Assert.Pass();
+        [Test]
+        public void Test1() {
+            Assert.Pass();
+        }
     }
 }

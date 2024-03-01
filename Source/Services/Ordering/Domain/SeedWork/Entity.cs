@@ -19,7 +19,7 @@ namespace EShop.Services.Ordering.Domain.SeedWork {
 
         public IReadOnlyCollection<INotification> DomainEvents {
             get {
-                return this.domainEvents;
+                return this.domainEvents?.AsReadOnly();
             }
         }
 
