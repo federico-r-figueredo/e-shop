@@ -7,7 +7,7 @@ using EShop.Services.Ordering.Domain.Events;
 using EShop.Services.Ordering.Domain.SeedWork;
 
 namespace EShop.Services.Ordering.Domain.Aggregates.BuyerAggregate {
-    internal class Buyer : Entity, IAggregateRoot {
+    public class Buyer : Entity, IAggregateRoot {
         private string identityGUID;
         private string name;
         private readonly List<PaymentMethod> paymentMethods;

@@ -4,7 +4,7 @@ using Dawn;
 using EShop.Services.Ordering.Domain.SeedWork;
 
 namespace EShop.Services.Ordering.Domain.Aggregates.BuyerAggregate {
-    internal class PaymentMethod : Entity {
+    public class PaymentMethod : Entity {
         private const byte MIN_PAYMENT_CARD_NUMBER_LENGTH = 8;
         private const byte MAX_PAYMENT_CARD_NUMBER_LENGTH = 19;
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using EShop.Services.Ordering.Domain.SeedWork;
 
 namespace EShop.Services.Ordering.Domain.Aggregates.OrderAggregate {
-    internal class Address : ValueObject {
+    public class Address : ValueObject {
         private string street;
         private string city;
         private string state;

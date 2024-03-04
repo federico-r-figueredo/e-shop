@@ -6,7 +6,7 @@ using EShop.Services.Ordering.Domain.Exceptions;
 using EShop.Services.Ordering.Domain.SeedWork;
 
 namespace EShop.Services.Ordering.Domain.Aggregates.OrderAggregate {
-    internal class OrderStatus : Enumeration {
+    public class OrderStatus : Enumeration {
         public static OrderStatus Submitted = new OrderStatus(1, nameof(Submitted).ToLowerInvariant());
         public static OrderStatus AwaitingValidation = new OrderStatus(2, nameof(AwaitingValidation).ToLowerInvariant());
         public static OrderStatus StockConfirmed = new OrderStatus(3, nameof(StockConfirmed).ToLowerInvariant());

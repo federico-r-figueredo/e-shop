@@ -8,7 +8,7 @@ using EShop.Services.Ordering.Domain.Exceptions;
 using EShop.Services.Ordering.Domain.SeedWork;
 
 namespace EShop.Services.Ordering.Domain.Aggregates.OrderAggregate {
-    internal class Order : Entity, IAggregateRoot {
+    public class Order : Entity, IAggregateRoot {
         // DDD Patterns Comment
         // Using private fields, allowed since EF Core 1.1, is a much better encapsulation
         // aligned with DDD Aggregates and Domain Entities (instead of properties and property collections)
@@ -38,12 +38,12 @@ namespace EShop.Services.Ordering.Domain.Aggregates.OrderAggregate {
             return order;
         }
 
-        protected Order() {
+        public Order() {
             this.orderItems = new List<OrderItem>();
             this.isDraft = false;
         }
 
-        protected Order(string userID, string userName, Address address,
+        public Order(string userID, string userName, Address address,
             int cardTypeID, string cardNumber, string cardSecurityCode,
             string cardHolderName, DateOnly cardExpiration,
             int? buyerID = null, int? paymentMethodID = null) : this() {

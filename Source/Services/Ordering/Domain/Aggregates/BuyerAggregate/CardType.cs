@@ -6,7 +6,7 @@ using Dawn;
 using EShop.Services.Ordering.Domain.SeedWork;
 
 namespace EShop.Services.Ordering.Domain.Aggregates.BuyerAggregate {
-    internal class CardType : Enumeration {
+    public class CardType : Enumeration {
         public static CardType AmericanExpress = new CardType(1, nameof(AmericanExpress));
         public static CardType Visa = new CardType(2, nameof(Visa));
         public static CardType MasterCard = new CardType(3, nameof(MasterCard));

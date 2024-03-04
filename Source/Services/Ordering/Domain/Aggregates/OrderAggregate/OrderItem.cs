@@ -5,7 +5,7 @@ using EShop.Services.Ordering.Domain.Exceptions;
 using EShop.Services.Ordering.Domain.SeedWork;
 
 namespace EShop.Services.Ordering.Domain.Aggregates.OrderAggregate {
-    internal class OrderItem : Entity {
+    public class OrderItem : Entity {
         private readonly int productID;
         private readonly string productName;
         private readonly string pictureURL;
