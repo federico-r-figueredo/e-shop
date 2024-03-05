@@ -81,7 +81,6 @@ namespace EShop.Services.Ordering.Domain.Aggregates.OrderAggregate {
 
         public int? BuyerID {
             get { return this.buyerID; }
-            set { this.buyerID = value; }
         }
 
         public Address Address {
