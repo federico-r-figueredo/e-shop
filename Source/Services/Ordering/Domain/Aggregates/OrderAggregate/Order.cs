@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,7 +49,7 @@ namespace EShop.Services.Ordering.Domain.Aggregates.OrderAggregate {
 
             this.buyerID = buyerID;
             this.paymentMethodID = paymentMethodID;
-            this.OrderStatus = OrderStatus.Submitted;
+            this.orderStatusID = OrderStatus.Submitted.ID;
             this.orderDate = DateTime.UtcNow;
             this.address = address;
 
@@ -65,6 +64,7 @@ namespace EShop.Services.Ordering.Domain.Aggregates.OrderAggregate {
             OrderStartedDomainEvent domainEvent = new OrderStartedDomainEvent(this, userID,
                 userName, cardTypeID, cardNumber, cardSecurityNumber, cardHolderName, cardExpiration);
 
+            this.Description = "The Order has been submitted";
             base.AddDomainEvent(domainEvent);
         }
 
@@ -83,6 +83,10 @@ namespace EShop.Services.Ordering.Domain.Aggregates.OrderAggregate {
             get { return this.buyerID; }
         }
 
+        public void SetBuyerID(int buyerID) {
+            this.buyerID = buyerID;
+        }
+
         public Address Address {
             get { return this.address; }
             private set { this.address = value; }
@@ -90,7 +94,10 @@ namespace EShop.Services.Ordering.Domain.Aggregates.OrderAggregate {
 
         public int? PaymentMethodID {
             get { return this.paymentMethodID; }
-            set { this.paymentMethodID = value; }
+        }
+
+        public void SetPaymentMethodID(int paymentMethodID) {
+            this.paymentMethodID = paymentMethodID;
         }
 
         #region  Order Status
@@ -113,6 +120,7 @@ namespace EShop.Services.Ordering.Domain.Aggregates.OrderAggregate {
             base.AddDomainEvent(new OrderStatusChangedToAwaitingValidationDomainEvent(this.ID, this.OrderItems));
 
             this.OrderStatus = OrderStatus.AwaitingValidation;
+            this.Description = "Items are pending on available stock validation";
         }
 
         public void SetStockConfirmedStatus() {
@@ -126,6 +134,7 @@ namespace EShop.Services.Ordering.Domain.Aggregates.OrderAggregate {
             base.AddDomainEvent(new OrderStatusChangedToStockConfirmedDomainEvent(this.ID, this.orderItems));
 
             this.OrderStatus = OrderStatus.StockConfirmed;
+            this.Description = "All the items were confirmed with available stock";
         }
 
         public void SetPaidStatus() {
@@ -139,6 +148,7 @@ namespace EShop.Services.Ordering.Domain.Aggregates.OrderAggregate {
             base.AddDomainEvent(new OrderStatusChangedToPaidDomainEvent(this.ID, this.orderItems));
 
             this.OrderStatus = OrderStatus.Paid;
+            this.Description = "The payment has been made";
         }
 
         public void SetShippedStatus() {
@@ -183,6 +193,7 @@ namespace EShop.Services.Ordering.Domain.Aggregates.OrderAggregate {
 
             string itemsStockRejectedDescription = string.Join(", ", itemsStockRejectedItemsProductNames);
             this.Description = $"The product items doesn't 've stock : {itemsStockRejectedDescription}";
+            base.AddDomainEvent(new OrderCancelledDomainEvent(this));
         }
 
         #endregion

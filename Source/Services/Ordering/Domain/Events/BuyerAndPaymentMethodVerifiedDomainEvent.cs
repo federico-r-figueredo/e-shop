@@ -3,12 +3,12 @@ using EShop.Services.Ordering.Domain.Aggregates.BuyerAggregate;
 using MediatR;
 
 namespace EShop.Services.Ordering.Domain.Events {
-    internal class BuyerPaymentMethodVerifiedDomainEvent : INotification {
+    public class BuyerAndPaymentMethodVerifiedDomainEvent : INotification {
         private readonly Buyer buyer;
         private readonly PaymentMethod paymentMethod;
         private readonly int orderID;
 
-        public BuyerPaymentMethodVerifiedDomainEvent(Buyer buyer, PaymentMethod paymentMethod, int orderID) {
+        public BuyerAndPaymentMethodVerifiedDomainEvent(Buyer buyer, PaymentMethod paymentMethod, int orderID) {
             this.buyer = buyer;
             this.paymentMethod = paymentMethod;
             this.orderID = orderID;

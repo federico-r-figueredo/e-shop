@@ -7,7 +7,7 @@ namespace EShop.Services.Ordering.Domain.Events {
     /// <summary>
     /// Event used when the order is paid
     /// </summary>
-    internal class OrderStatusChangedToPaidDomainEvent : INotification {
+    public class OrderStatusChangedToPaidDomainEvent : INotification {
         private int orderID;
         private IEnumerable<OrderItem> orderItems;
 

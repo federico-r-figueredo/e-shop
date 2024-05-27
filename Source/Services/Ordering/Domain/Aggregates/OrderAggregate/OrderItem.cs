@@ -1,5 +1,3 @@
-
-using System;
 using Dawn;
 using EShop.Services.Ordering.Domain.Exceptions;
 using EShop.Services.Ordering.Domain.SeedWork;
@@ -13,18 +11,20 @@ namespace EShop.Services.Ordering.Domain.Aggregates.OrderAggregate {
         private decimal discount;
         private int units;
 
-        protected OrderItem() { }
-
         public OrderItem(int productID, string productName, decimal unitPrice, decimal discount,
             string pictureURL, int units = 1) {
+            this.units = Guard
+                .Argument(units, nameof(this.units))
+                .GreaterThan(0)
+                .Value;
+
             GuardAgainstTotalOrderItemCostLesserThanAppliedDiscount(unitPrice, units, discount);
 
             this.productID = productID;
             this.productName = productName;
             this.pictureURL = pictureURL;
             this.unitPrice = unitPrice;
-            this.Discount = discount;
-            this.Units = units;
+            SetNewDiscount(discount);
         }
 
         private static void GuardAgainstTotalOrderItemCostLesserThanAppliedDiscount(decimal unitPrice, int units, decimal discount) {
@@ -49,16 +49,8 @@ namespace EShop.Services.Ordering.Domain.Aggregates.OrderAggregate {
             get { return this.unitPrice; }
         }
 
-        #region Discount
-
         public decimal Discount {
             get { return this.discount; }
-            private set {
-                this.discount = Guard
-                    .Argument(value, nameof(this.discount))
-                    .GreaterThan(-1)
-                    .Value;
-            }
         }
 
         public void SetNewDiscount(decimal newDiscount) {
@@ -68,18 +60,8 @@ namespace EShop.Services.Ordering.Domain.Aggregates.OrderAggregate {
                 .Value;
         }
 
-        #endregion
-
-        #region Units
-
         public int Units {
             get { return units; }
-            private set {
-                this.units = Guard
-                    .Argument(value, nameof(this.units))
-                    .GreaterThan(0)
-                    .Value;
-            }
         }
 
         public void AddUnits(int units) {
@@ -95,7 +77,5 @@ namespace EShop.Services.Ordering.Domain.Aggregates.OrderAggregate {
                 .GreaterThan(0)
                 .Value;
         }
-
-        #endregion
     }
 }

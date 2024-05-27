@@ -7,7 +7,7 @@ namespace EShop.Services.Ordering.Domain.Events {
     /// <summary>
     /// Event used when the grace period order is confirmed
     /// </summary>
-    internal class OrderStatusChangedToAwaitingValidationDomainEvent : INotification {
+    public class OrderStatusChangedToAwaitingValidationDomainEvent : INotification {
         private int orderID;
         private IEnumerable<OrderItem> orderItems;
 

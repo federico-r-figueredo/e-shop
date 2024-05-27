@@ -10,8 +10,6 @@ namespace EShop.Services.Ordering.Domain.Aggregates.OrderAggregate {
         private string country;
         private string zipCode;
 
-        protected Address() { }
-
         public Address(string street, string city, string state, string country, string zipCode) {
             this.Street = street;
             this.City = city;

@@ -7,7 +7,7 @@ namespace EShop.Services.Ordering.Domain.Events {
     /// <summary>
     /// Event used when an order is created
     /// </summary>
-    internal class OrderStartedDomainEvent : DomainEvent, INotification {
+    public class OrderStartedDomainEvent : INotification {
         private readonly Order order;
         private readonly string userID;
         private readonly string userName;

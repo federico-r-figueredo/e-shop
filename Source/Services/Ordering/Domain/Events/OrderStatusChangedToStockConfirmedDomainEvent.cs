@@ -7,7 +7,7 @@ namespace EShop.Services.Ordering.Domain.Events {
     /// <summary>
     /// Event used when the order stock items are confirmed
     /// </summary>
-    internal class OrderStatusChangedToStockConfirmedDomainEvent : INotification {
+    public class OrderStatusChangedToStockConfirmedDomainEvent : INotification {
         private int orderID;
         private IEnumerable<OrderItem> orderItems;
 

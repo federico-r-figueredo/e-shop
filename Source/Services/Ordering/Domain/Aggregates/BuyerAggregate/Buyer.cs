@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +23,7 @@ namespace EShop.Services.Ordering.Domain.Aggregates.BuyerAggregate {
         public string IdentityGUID {
             get { return identityGUID; }
             private set {
-                identityGUID = Guard
+                this.identityGUID = Guard
                     .Argument(value, nameof(this.IdentityGUID))
                     .NotNull()
                     .NotWhiteSpace()
@@ -35,7 +34,7 @@ namespace EShop.Services.Ordering.Domain.Aggregates.BuyerAggregate {
         public string Name {
             get { return name; }
             private set {
-                name = Guard
+                this.name = Guard
                     .Argument(value, nameof(this.name))
                     .NotNull()
                     .NotWhiteSpace()
@@ -48,11 +47,11 @@ namespace EShop.Services.Ordering.Domain.Aggregates.BuyerAggregate {
         }
 
         public PaymentMethod VerifyOrAddPaymentMethod(int cardTypeID, string alias,
-            string paymentCardNumber, string securityNumber, string cardHolderNumber,
-            DateOnly expirationDate, int orderID) {
+            string paymentCardNumber, string cardVerificationCode, string cardHolderName,
+            DateOnly cardExpiration, int orderID) {
 
             PaymentMethod existingPaymentMethod = this.paymentMethods
-                .SingleOrDefault(x => x.IsEqualTo(cardTypeID, paymentCardNumber, expirationDate));
+                .SingleOrDefault(x => x.IsEqualTo(cardTypeID, paymentCardNumber, cardExpiration));
 
             if (existingPaymentMethod != null) {
                 AddBuyerPaymentMethodVerifiedDomainEvent(existingPaymentMethod, orderID);
@@ -60,7 +59,7 @@ namespace EShop.Services.Ordering.Domain.Aggregates.BuyerAggregate {
             }
 
             PaymentMethod newPaymentMethod = new PaymentMethod(cardTypeID, alias,
-                paymentCardNumber, securityNumber, cardHolderNumber, expirationDate);
+                paymentCardNumber, cardVerificationCode, cardHolderName, cardExpiration);
             this.paymentMethods.Add(newPaymentMethod);
 
             AddBuyerPaymentMethodVerifiedDomainEvent(newPaymentMethod, orderID);
@@ -71,7 +70,7 @@ namespace EShop.Services.Ordering.Domain.Aggregates.BuyerAggregate {
         private void AddBuyerPaymentMethodVerifiedDomainEvent(PaymentMethod newPaymentMethod,
             int orderID) {
 
-            base.AddDomainEvent(new BuyerPaymentMethodVerifiedDomainEvent(this,
+            base.AddDomainEvent(new BuyerAndPaymentMethodVerifiedDomainEvent(this,
                 newPaymentMethod, orderID));
         }
     }

@@ -3,7 +3,7 @@ using EShop.Services.Ordering.Domain.Aggregates.OrderAggregate;
 using MediatR;
 
 namespace EShop.Services.Ordering.Domain.Events {
-    internal class OrderShippedDomainEvent : INotification {
+    public class OrderShippedDomainEvent : INotification {
         private Order order;
 
         public OrderShippedDomainEvent(Order order) {

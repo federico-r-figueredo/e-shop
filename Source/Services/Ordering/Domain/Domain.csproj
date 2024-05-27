@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <LangVersion>7.3</LangVersion>
-    <NoWarn>IDE0290,IDE0003,IDE0090,IDE0002,IDE0049,IDE0034,IDE0270,IDE0041</NoWarn>
+    <NoWarn>IDE0290,IDE0003,IDE0090,IDE0002,IDE0049,IDE0034,IDE0270,IDE0041, IDE0052, CS0414</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

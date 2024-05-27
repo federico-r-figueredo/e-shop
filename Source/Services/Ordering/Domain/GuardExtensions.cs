@@ -22,17 +22,17 @@ namespace EShop.Services.Ordering.Domain {
         }
 
         private static string GetInvalidCardTypeIDMessage(Guard.ArgumentInfo<CardType> argument) {
-            return $"Invalid {nameof(argument.Name)}'s value. Possible values: {String.Join(",", CardType.ToEnumerable().Select(x => x.ID))}";
+            return $"Invalid {argument.Name}'s value. Possible values: {String.Join(",", CardType.ToEnumerable().Select(x => x.ID))}";
         }
 
         private static string GetInvalidCardTypeName(Guard.ArgumentInfo<CardType> argument) {
-            return $"Invalid {nameof(argument.Name)}. Possible values: {String.Join(",", CardType.ToEnumerable().Select(x => x.Name))}.";
+            return $"Invalid {argument.Name}. Possible values: {String.Join(",", CardType.ToEnumerable().Select(x => x.Name))}.";
         }
 
         public static ref readonly Guard.ArgumentInfo<int> IsValidCardTypeID(in this Guard.ArgumentInfo<int> argument) {
             int id = argument.Value;
             if (!CardType.ToEnumerable().Any(x => x.ID == id)) {
-                throw Guard.Fail(new OrderingDomainException($"Invalid {nameof(argument.Name)}'s value. Possible values: {String.Join(",", CardType.ToEnumerable().Select(x => x.ID))}"));
+                throw Guard.Fail(new OrderingDomainException($"Invalid {argument.Name}'s value. Possible values: {String.Join(",", CardType.ToEnumerable().Select(x => x.ID))}"));
             }
 
             return ref argument;
@@ -40,7 +40,7 @@ namespace EShop.Services.Ordering.Domain {
 
         public static ref readonly Guard.ArgumentInfo<DateOnly> GreaterThan(in this Guard.ArgumentInfo<DateOnly> argument, DateOnly dateTime) {
             if (argument.Value < dateTime) {
-                throw Guard.Fail(new OrderingDomainException($"Invalid {nameof(argument.Name)}'s value. {argument.Name} can't be lesser than current date-time (${dateTime})"));
+                throw Guard.Fail(new OrderingDomainException($"Invalid {argument.Name}'s value. {argument.Name} can't be lesser than current date-time ({dateTime})"));
             }
 
             return ref argument;

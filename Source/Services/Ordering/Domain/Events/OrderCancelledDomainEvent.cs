@@ -3,7 +3,7 @@ using EShop.Services.Ordering.Domain.Aggregates.OrderAggregate;
 using MediatR;
 
 namespace EShop.Services.Ordering.Domain.Events {
-    internal class OrderCancelledDomainEvent : INotification {
+    public class OrderCancelledDomainEvent : INotification {
         private Order order;
 
         public OrderCancelledDomainEvent(Order order) {
