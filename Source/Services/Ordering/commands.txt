@@ -1,0 +1,6 @@
+# Create migration
+dotnet ef migrations add Initial --project .\Infrastructure\ --output-dir ./Migrations --verbose
+
+# Update Database (up to latest migration)
+dotnet ef database update --project .\API\ --verbose
+dotnet ef database update --connection "Server=localhost;Initial Catalog=Ordering;User Id=admin;Password=1234;TrustServerCertificate=True;Encrypt=false;Trusted_Connection=True;"
