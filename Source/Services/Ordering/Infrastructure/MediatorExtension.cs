@@ -6,7 +6,7 @@ using EShop.Services.Ordering.Domain.SeedWork;
 using MediatR;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace Ordering.Infrastructure {
+namespace EShop.Services.Ordering.Infrastructure {
     static class MediatorExtension {
         public static async Task DispatchDomainEventsAsync(this IMediator mediator, OrderingContext context) {
             IEnumerable<EntityEntry<Entity>> domainEntities = context

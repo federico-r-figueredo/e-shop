@@ -4,7 +4,7 @@ using EShop.Services.Ordering.Domain.Aggregates.BuyerAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Ordering.Infrastructure.EntityTypeConfigurations {
+namespace EShop.Services.Ordering.Infrastructure.EntityTypeConfigurations {
     internal class PaymentMethodEntityTypeConfiguration : IEntityTypeConfiguration<PaymentMethod> {
         public void Configure(EntityTypeBuilder<PaymentMethod> builder) {
             builder.ToTable(nameof(OrderingContext.PaymentMethods), OrderingContext.DEFAULT_SCHEMA);
@@ -16,13 +16,6 @@ namespace Ordering.Infrastructure.EntityTypeConfigurations {
                 .UseHiLo("PaymentMethodSequence", OrderingContext.DEFAULT_SCHEMA);
 
             builder
-                .Property<string>("cardHolderName")
-                .UsePropertyAccessMode(PropertyAccessMode.Field)
-                .HasColumnName("CardHolderName")
-                .HasMaxLength(200)
-                .IsRequired();
-
-            builder
                 .Property<string>("alias")
                 .UsePropertyAccessMode(PropertyAccessMode.Field)
                 .HasColumnName("Alias")
@@ -30,16 +23,30 @@ namespace Ordering.Infrastructure.EntityTypeConfigurations {
                 .IsRequired();
 
             builder
-                .Property<string>("cardNumber")
+                .Property<string>("paymentCardNumber")
                 .UsePropertyAccessMode(PropertyAccessMode.Field)
-                .HasColumnName("CardNumber")
+                .HasColumnName("PaymentCardNumber")
                 .HasMaxLength(25)
                 .IsRequired();
 
             builder
-                .Property<DateTime>("expiration")
+                .Property<string>("cardHolderName")
                 .UsePropertyAccessMode(PropertyAccessMode.Field)
-                .HasColumnName("Expiration")
+                .HasColumnName("CardHolderName")
+                .HasMaxLength(200)
+                .IsRequired();
+
+            builder
+                .Property<DateOnly>("cardExpiration")
+                .UsePropertyAccessMode(PropertyAccessMode.Field)
+                .HasColumnName("CardExpiration")
+                .HasMaxLength(200)
+                .IsRequired();
+
+            builder
+                .Property<string>("cardVerificationCode")
+                .UsePropertyAccessMode(PropertyAccessMode.Field)
+                .HasColumnName("CardVerificationCode")
                 .HasMaxLength(25)
                 .IsRequired();
 

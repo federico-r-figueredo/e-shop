@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Dawn;
 using EShop.Services.Ordering.Domain.Exceptions;
 
-namespace Ordering.Infrastructure.Idempotency {
+namespace EShop.Services.Ordering.Infrastructure.Idempotency {
     internal class RequestManager : IRequestManager {
         private readonly OrderingContext context;
 

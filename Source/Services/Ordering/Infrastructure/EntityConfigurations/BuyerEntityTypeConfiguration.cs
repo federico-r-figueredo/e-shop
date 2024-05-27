@@ -3,7 +3,7 @@ using EShop.Services.Ordering.Domain.Aggregates.BuyerAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Ordering.Infrastructure.EntityTypeConfigurations {
+namespace EShop.Services.Ordering.Infrastructure.EntityTypeConfigurations {
     internal class BuyerEntityTypeConfiguration : IEntityTypeConfiguration<Buyer> {
         public void Configure(EntityTypeBuilder<Buyer> builder) {
             builder.ToTable("Buyers", OrderingContext.DEFAULT_SCHEMA);

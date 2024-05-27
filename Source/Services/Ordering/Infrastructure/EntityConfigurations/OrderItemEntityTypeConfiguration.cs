@@ -3,7 +3,7 @@ using EShop.Services.Ordering.Domain.Aggregates.OrderAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Ordering.Infrastructure.EntityTypeConfigurations {
+namespace EShop.Services.Ordering.Infrastructure.EntityTypeConfigurations {
     internal class OrderItemEntityTypeConfiguration : IEntityTypeConfiguration<OrderItem> {
         public void Configure(EntityTypeBuilder<OrderItem> builder) {
             builder.ToTable(nameof(OrderingContext.OrderItems), OrderingContext.DEFAULT_SCHEMA);
@@ -17,14 +17,9 @@ namespace Ordering.Infrastructure.EntityTypeConfigurations {
             builder.Property("OrderID").IsRequired();
 
             builder
-                .Property<decimal>("discount")
+                .Property<int>("productID")
                 .UsePropertyAccessMode(PropertyAccessMode.Field)
-                .HasColumnName("Discount")
-                .IsRequired();
-
-            // TODO: Review if this is correct or we need to target productID field
-            builder
-                .Property<int>("ProductID")
+                .HasColumnName("ProductID")
                 .IsRequired();
 
             builder
@@ -34,9 +29,21 @@ namespace Ordering.Infrastructure.EntityTypeConfigurations {
                 .IsRequired();
 
             builder
+                .Property<string>("pictureURL")
+                .UsePropertyAccessMode(PropertyAccessMode.Field)
+                .HasColumnName("PictureURL")
+                .IsRequired(false);
+
+            builder
                 .Property<decimal>("unitPrice")
                 .UsePropertyAccessMode(PropertyAccessMode.Field)
                 .HasColumnName("UnitPrice")
+                .IsRequired();
+
+            builder
+                .Property<decimal>("discount")
+                .UsePropertyAccessMode(PropertyAccessMode.Field)
+                .HasColumnName("Discount")
                 .IsRequired();
 
             builder
@@ -44,12 +51,6 @@ namespace Ordering.Infrastructure.EntityTypeConfigurations {
                 .UsePropertyAccessMode(PropertyAccessMode.Field)
                 .HasColumnName("Units")
                 .IsRequired();
-
-            builder
-                .Property<string>("pictureURL")
-                .UsePropertyAccessMode(PropertyAccessMode.Field)
-                .HasColumnName("PictureURL")
-                .IsRequired(false);
         }
     }
 }

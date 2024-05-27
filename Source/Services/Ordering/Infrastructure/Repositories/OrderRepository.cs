@@ -6,8 +6,8 @@ using EShop.Services.Ordering.Domain.Aggregates.OrderAggregate;
 using EShop.Services.Ordering.Domain.SeedWork;
 using Microsoft.EntityFrameworkCore;
 
-namespace Ordering.Infrastructure.Repositories {
-    internal class OrderRepository : IOrderRepository {
+namespace EShop.Services.Ordering.Infrastructure.Repositories {
+    public class OrderRepository : IOrderRepository {
         private readonly OrderingContext context;
 
         public OrderRepository(OrderingContext context) {
@@ -15,10 +15,6 @@ namespace Ordering.Infrastructure.Repositories {
                 .Argument(context, nameof(context))
                 .NotNull()
                 .Value;
-        }
-
-        public IUnitOfWork UnitOfWork {
-            get { return this.context; }
         }
 
         public Order Add(Order order) {

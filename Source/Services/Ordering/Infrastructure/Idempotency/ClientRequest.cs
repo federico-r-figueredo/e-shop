@@ -1,7 +1,7 @@
 
 using System;
 
-namespace Ordering.Infrastructure.Idempotency {
+namespace EShop.Services.Ordering.Infrastructure.Idempotency {
     public class ClientRequest {
         private readonly Guid id;
         private readonly string name;

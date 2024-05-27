@@ -6,13 +6,13 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
-namespace Ordering.Infrastructure {
+namespace EShop.Services.Ordering.Infrastructure {
     internal class OrderingContextDesignFactory : IDesignTimeDbContextFactory<OrderingContext> {
         public OrderingContext CreateDbContext(string[] args) {
             DbContextOptionsBuilder<OrderingContext> optionsBuilder =
                 new DbContextOptionsBuilder<OrderingContext>()
                     .UseSqlServer("Server=.;Initial Catalog=eShop.Services.Ordering;IntegratedSecurity=true");
-            return new OrderingContext(optionsBuilder.Options, new NoMediator());
+            return new OrderingContext(optionsBuilder.Options);
         }
 
         private class NoMediator : IMediator {

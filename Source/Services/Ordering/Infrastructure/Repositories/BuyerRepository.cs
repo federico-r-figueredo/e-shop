@@ -1,13 +1,11 @@
-
 using System.Linq;
 using System.Threading.Tasks;
 using Dawn;
 using EShop.Services.Ordering.Domain.Aggregates.BuyerAggregate;
-using EShop.Services.Ordering.Domain.SeedWork;
 using Microsoft.EntityFrameworkCore;
 
-namespace Ordering.Infrastructure.Repositories {
-    internal class BuyerRepository : IBuyerRepository {
+namespace EShop.Services.Ordering.Infrastructure.Repositories {
+    public class BuyerRepository : IBuyerRepository {
         private readonly OrderingContext context;
 
         public BuyerRepository(OrderingContext context) {
@@ -15,10 +13,6 @@ namespace Ordering.Infrastructure.Repositories {
                 .Argument(context, nameof(context))
                 .NotNull()
                 .Value;
-        }
-
-        public IUnitOfWork UnitOfWork {
-            get { return this.context; }
         }
 
         public Buyer Add(Buyer buyer) {

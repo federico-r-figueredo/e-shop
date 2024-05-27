@@ -1,11 +1,10 @@
-
 using System;
 using EShop.Services.Ordering.Domain.Aggregates.BuyerAggregate;
 using EShop.Services.Ordering.Domain.Aggregates.OrderAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Ordering.Infrastructure.EntityTypeConfigurations {
+namespace EShop.Services.Ordering.Infrastructure.EntityTypeConfigurations {
     internal class OrderEntityTypeConfiguration : IEntityTypeConfiguration<Order> {
         public void Configure(EntityTypeBuilder<Order> builder) {
             builder.ToTable(nameof(OrderingContext.Orders), OrderingContext.DEFAULT_SCHEMA);
@@ -13,6 +12,24 @@ namespace Ordering.Infrastructure.EntityTypeConfigurations {
             builder.Ignore(x => x.DomainEvents);
 
             builder.Property(x => x.ID).UseHiLo("OrdersSequence", OrderingContext.DEFAULT_SCHEMA);
+
+            builder
+                .Property<DateTime>("orderDate")
+                .UsePropertyAccessMode(PropertyAccessMode.Field)
+                .HasColumnName("OrderDate")
+                .IsRequired();
+
+            builder
+                .Property<string>("description")
+                .UsePropertyAccessMode(PropertyAccessMode.Field)
+                .HasColumnName("Description")
+                .IsRequired(false);
+
+            builder
+                .Property<int?>("buyerID")
+                .UsePropertyAccessMode(PropertyAccessMode.Field)
+                .HasColumnName("BuyerID")
+                .IsRequired(false);
 
             // Address value object is persisted as owned entity type (supported since EF Core 2.0)
             builder.OwnsOne(x => x.Address, x => {
@@ -23,34 +40,16 @@ namespace Ordering.Infrastructure.EntityTypeConfigurations {
             });
 
             builder
-                .Property<int?>("buyerID")
-                .UsePropertyAccessMode(PropertyAccessMode.Field)
-                .HasColumnName("BuyerID")
-                .IsRequired(false);
-
-            builder
-                .Property<DateTime>("orderDate")
-                .UsePropertyAccessMode(PropertyAccessMode.Field)
-                .HasColumnName("OrderDate")
-                .IsRequired();
-
-            builder
-                .Property<int>("orderStatusID")
-                .UsePropertyAccessMode(PropertyAccessMode.Field)
-                .HasColumnName("OrderStatusID")
-                .IsRequired();
-
-            builder
                 .Property<int?>("paymentMethodID")
                 .UsePropertyAccessMode(PropertyAccessMode.Field)
                 .HasColumnName("PaymentMethodID")
                 .IsRequired(false);
 
             builder
-                .Property<string>("description")
+                .Property<int>("orderStatusID")
                 .UsePropertyAccessMode(PropertyAccessMode.Field)
-                .HasColumnName("Description")
-                .IsRequired(false);
+                .HasColumnName("OrderStatusID")
+                .IsRequired();
 
             var navigation = builder.Metadata.FindNavigation(nameof(Order.OrderItems));
 
