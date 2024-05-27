@@ -4,7 +4,7 @@ using System.Text.Json;
 using EShop.BuildingBlocks.EventBus.EventBus.Events;
 
 namespace EShop.BuildingBlocks.EventBus.IntegrationEventLog {
-    internal class IntegrationEventLogEntry {
+    public class IntegrationEventLogEntry {
         private Guid integrationEventID;
         private string eventTypeName;
         private IntegrationEvent @event;
