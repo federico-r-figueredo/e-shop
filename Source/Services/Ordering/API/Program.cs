@@ -1,26 +1,28 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using EShop.Services.Ordering.Infrastructure;
 
-namespace Ordering.Application
-{
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
+namespace EShop.Services.Ordering.API {
+    public static class Program {
+        public static async Task Main(string[] args) {
+            IHost host = CreateHostBuilder(args).Build();
+
+            using (IServiceScope scope = host.Services.CreateScope()) {
+                OrderingContext dbContext = scope.ServiceProvider.GetRequiredService<OrderingContext>();
+                await dbContext.Database.MigrateAsync();
+            }
+
+            host.Run();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
+        public static IHostBuilder CreateHostBuilder(string[] args) {
+            return Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder => {
                     webBuilder.UseStartup<Startup>();
                 });
+        }
     }
 }
