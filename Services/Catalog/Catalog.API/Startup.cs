@@ -1,8 +1,10 @@
 using System;
 using System.IO;
 using System.Reflection;
+using eShop.Services.Catalog.API.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -28,6 +30,19 @@ namespace eShop.Services.Catalog.API {
 
                 string xmlFileName = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFileName));
+            });
+            services.AddDbContext<CatalogContext>(options => {
+                options.UseSqlServer(
+                    configuration.GetConnectionString("SQLServer"),
+                    action => {
+                        action.MigrationsAssembly(typeof(Startup).Assembly.GetName().Name);
+                        action.EnableRetryOnFailure(
+                            maxRetryCount: 15,
+                            maxRetryDelay: TimeSpan.FromSeconds(30),
+                            errorNumbersToAdd: null
+                        );
+                    }
+                );
             });
         }
 
