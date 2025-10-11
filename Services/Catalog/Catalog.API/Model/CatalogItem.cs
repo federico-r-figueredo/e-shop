@@ -1,4 +1,3 @@
-
 using System;
 using eShop.Services.Catalog.API.Infrastructure.Exceptions;
 
@@ -16,7 +15,7 @@ namespace eShop.Services.Catalog.API.Model {
         internal CatalogBrand CatalogBrand { get; set; }
 
         // Quanity in stock
-        internal int AvailableStock { get; private set; }
+        internal int AvailableStock { get; set; }
 
         // Available stock at which we should reorder
         internal int RestockThreshold { get; set; }
