@@ -42,10 +42,15 @@ namespace Catalog.API.Infrastructure.CatalogMigrations {
                 columns: table => new {
                     ID = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     PictureFileName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CatalogTypeID = table.Column<int>(type: "int", nullable: false),
-                    CatalogBrandID = table.Column<int>(type: "int", nullable: false)
+                    CatalogBrandID = table.Column<int>(type: "int", nullable: false),
+                    AvailableStock = table.Column<int>(type: "int", nullable: false),
+                    RestockThreshold = table.Column<int>(type: "int", nullable: false),
+                    MaxStockThreshold = table.Column<int>(type: "int", nullable: false),
+                    IsOnReorder = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table => {
                     table.PrimaryKey("PK_CatalogItems", x => x.ID);

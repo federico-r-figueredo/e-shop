@@ -2,7 +2,7 @@ using eShop.Services.Catalog.API.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace eShop.Services.Catalog.API.Infrastructure {
-    internal class CatalogContext : DbContext {
+    public class CatalogContext : DbContext {
         public CatalogContext(DbContextOptions<CatalogContext> options) : base(options) { }
 
         public DbSet<CatalogItem> CatalogItems { get; set; }

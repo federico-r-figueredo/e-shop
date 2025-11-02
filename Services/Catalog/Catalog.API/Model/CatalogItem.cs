@@ -2,30 +2,30 @@ using System;
 using eShop.Services.Catalog.API.Infrastructure.Exceptions;
 
 namespace eShop.Services.Catalog.API.Model {
-    internal class CatalogItem {
-        internal int ID { get; set; }
-        internal string Name { get; set; }
-        internal string Description { get; set; }
-        internal decimal Price { get; set; }
-        internal string PictureFileName { get; set; }
+    public class CatalogItem {
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public decimal Price { get; set; }
+        public string PictureFileName { get; set; }
         internal string PictureURI { get; set; }
-        internal int CatalogTypeID { get; set; }
-        internal CatalogType CatalogType { get; set; }
-        internal int CatalogBrandID { get; set; }
-        internal CatalogBrand CatalogBrand { get; set; }
+        public int CatalogTypeID { get; set; }
+        public CatalogType CatalogType { get; set; }
+        public int CatalogBrandID { get; set; }
+        public CatalogBrand CatalogBrand { get; set; }
 
         // Quanity in stock
-        internal int AvailableStock { get; set; }
+        public int AvailableStock { get; set; }
 
         // Available stock at which we should reorder
-        internal int RestockThreshold { get; set; }
+        public int RestockThreshold { get; set; }
 
         // Maximum number of units that can be in-stock at any time 
         // (due ot physical / logistical constraints in warehouses)
-        internal int MaxStockThreshold { get; set; }
+        public int MaxStockThreshold { get; set; }
 
         // True is item is in reorder
-        internal bool IsOnReorder { get; set; }
+        public bool IsOnReorder { get; set; }
 
         /// <summary>
         /// Decrements the quantity of a particular item in inventory and ensures the
@@ -41,7 +41,7 @@ namespace eShop.Services.Catalog.API.Model {
         /// </summary>
         /// <param name="quantityDesired"></param>
         /// <returns>int: Returns the number actually removed from stock.</returns>
-        internal int RemoveStock(int quantityDesired) {
+        public int RemoveStock(int quantityDesired) {
             if (this.AvailableStock == 0) {
                 throw new CatalogDomainException($"Empty stock, product item {Name} is sold out.");
             }
@@ -59,7 +59,7 @@ namespace eShop.Services.Catalog.API.Model {
         /// Increments the quanity of a particular item in the inventory
         /// </summary>
         /// <returns>int: Returns the quantity that has been added to stock</returns>
-        internal int AddStock(int quantity) {
+        public int AddStock(int quantity) {
             int originalStock = this.AvailableStock;
 
             // The quantity that the client is trying to add to stock is greater than what

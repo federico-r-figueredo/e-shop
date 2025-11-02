@@ -1,22 +1,22 @@
 using System;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Polly;
 using Polly.Retry;
 
 namespace eShop.Services.Catalog.API.Extensions {
-    internal static class HostExtensions {
-        internal static bool IsInKubernetes(this IHost host) {
+    internal static class WebHostExtensions {
+        internal static bool IsInKubernetes(this IWebHost host) {
             IConfiguration configuration = host.Services.GetService<IConfiguration>();
             string orchestatorType = configuration.GetValue<string>("OrchestatorType");
             return orchestatorType?.ToUpper() == "K8S";
         }
 
-        internal static IHost MigrateDbContext<TContext>(this IHost host,
+        internal static IWebHost MigrateDbContext<TContext>(this IWebHost host,
             Action<TContext, IServiceProvider> seeder) where TContext : DbContext {
 
             bool isUnderK8S = host.IsInKubernetes();

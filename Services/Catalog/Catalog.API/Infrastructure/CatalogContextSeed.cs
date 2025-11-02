@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using eShop.Services.Catalog.API.Extensions;
 using eShop.Services.Catalog.API.Model;
+using eShop.Services.Catalog.API.Settings;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;

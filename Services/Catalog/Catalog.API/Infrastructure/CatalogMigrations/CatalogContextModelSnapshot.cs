@@ -49,10 +49,22 @@ namespace Catalog.API.Infrastructure.CatalogMigrations {
 
                 SqlServerPropertyBuilderExtensions.UseHiLo(b.Property<int>("ID"), "catalog_items_hilo");
 
+                b.Property<int>("AvailableStock")
+                    .HasColumnType("int");
+
                 b.Property<int>("CatalogBrandID")
                     .HasColumnType("int");
 
                 b.Property<int>("CatalogTypeID")
+                    .HasColumnType("int");
+
+                b.Property<string>("Description")
+                    .HasColumnType("nvarchar(max)");
+
+                b.Property<bool>("IsOnReorder")
+                    .HasColumnType("bit");
+
+                b.Property<int>("MaxStockThreshold")
                     .HasColumnType("int");
 
                 b.Property<string>("Name")
@@ -66,6 +78,9 @@ namespace Catalog.API.Infrastructure.CatalogMigrations {
 
                 b.Property<decimal>("Price")
                     .HasColumnType("decimal(18,2)");
+
+                b.Property<int>("RestockThreshold")
+                    .HasColumnType("int");
 
                 b.HasKey("ID");
 

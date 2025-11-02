@@ -1,6 +1,192 @@
-@Catalog.API_HostAddress = http://localhost:5003
+@baseUrl = http://localhost:5003
+@contentType = application/json
 
-GET {{Catalog.API_HostAddress}}/weatherforecast/
-Accept: application/json
+########################################
+### Request: GET /api/v1/Catalog/items
+########################################
 
-###
+### Query Parameter: GetApiV1CatalogItems_pageSize
+@GetApiV1CatalogItems_pageSize = 0
+
+### Query Parameter: GetApiV1CatalogItems_pageIndex
+@GetApiV1CatalogItems_pageIndex = 0
+
+### Query Parameter: GetApiV1CatalogItems_ids
+@GetApiV1CatalogItems_ids = str
+
+
+GET {{baseUrl}}/api/v1/Catalog/items?pageSize={{GetApiV1CatalogItems_pageSize}}&pageIndex={{GetApiV1CatalogItems_pageIndex}}&ids={{GetApiV1CatalogItems_ids}}
+Content-Type: {{contentType}}
+
+
+########################################
+### Request: PUT /api/v1/Catalog/items
+########################################
+
+
+PUT {{baseUrl}}/api/v1/Catalog/items
+Content-Type: {{contentType}}
+
+{
+  "id": 0,
+  "name": "name",
+  "description": "description",
+  "price": 0.0,
+  "pictureFileName": "pictureFileName",
+  "catalogTypeID": 0,
+  "catalogType": {
+    "id": 0,
+    "type": "type"
+  },
+  "catalogBrandID": 0,
+  "catalogBrand": {
+    "id": 0,
+    "brand": "brand"
+  },
+  "availableStock": 0,
+  "restockThreshold": 0,
+  "maxStockThreshold": 0,
+  "isOnReorder": false
+}
+
+#########################################
+### Request: POST /api/v1/Catalog/items
+#########################################
+
+
+POST {{baseUrl}}/api/v1/Catalog/items
+Content-Type: {{contentType}}
+
+{
+  "id": 0,
+  "name": "name",
+  "description": "description",
+  "price": 0.0,
+  "pictureFileName": "pictureFileName",
+  "catalogTypeID": 0,
+  "catalogType": {
+    "id": 0,
+    "type": "type"
+  },
+  "catalogBrandID": 0,
+  "catalogBrand": {
+    "id": 0,
+    "brand": "brand"
+  },
+  "availableStock": 0,
+  "restockThreshold": 0,
+  "maxStockThreshold": 0,
+  "isOnReorder": false
+}
+
+#############################################
+### Request: GET /api/v1/Catalog/items/{id}
+#############################################
+
+### Path Parameter: GetApiV1CatalogItems{id}_id
+@GetApiV1CatalogItems{id}_id = 0
+
+
+GET {{baseUrl}}/api/v1/Catalog/items/{{GetApiV1CatalogItems{id}_id}}
+Content-Type: {{contentType}}
+
+
+########################################################
+### Request: GET /api/v1/Catalog/items/withname/{name}
+########################################################
+
+### Path Parameter: GetApiV1CatalogItemsWithname{name}_name
+@GetApiV1CatalogItemsWithname{name}_name = str
+
+### Query Parameter: GetApiV1CatalogItemsWithname{name}_pageSize
+@GetApiV1CatalogItemsWithname{name}_pageSize = 0
+
+### Query Parameter: GetApiV1CatalogItemsWithname{name}_pageIndex
+@GetApiV1CatalogItemsWithname{name}_pageIndex = 0
+
+
+GET {{baseUrl}}/api/v1/Catalog/items/withname/{{GetApiV1CatalogItemsWithname{name}_name}}
+Content-Type: {{contentType}}
+
+
+####################################################################################
+### Request: GET /api/v1/Catalog/items/type/{catalogTypeID}/brand/{catalogBrandID}
+####################################################################################
+
+### Path Parameter: GetApiV1CatalogItemsType{catalogTypeID}Brand{catalogBrandID}_catalogTypeID
+@GetApiV1CatalogItemsType{catalogTypeID}Brand{catalogBrandID}_catalogTypeID = 0
+
+### Path Parameter: GetApiV1CatalogItemsType{catalogTypeID}Brand{catalogBrandID}_catalogBrandID
+@GetApiV1CatalogItemsType{catalogTypeID}Brand{catalogBrandID}_catalogBrandID = 0
+
+### Query Parameter: GetApiV1CatalogItemsType{catalogTypeID}Brand{catalogBrandID}_pageSize
+@GetApiV1CatalogItemsType{catalogTypeID}Brand{catalogBrandID}_pageSize = 0
+
+### Query Parameter: GetApiV1CatalogItemsType{catalogTypeID}Brand{catalogBrandID}_pageIndex
+@GetApiV1CatalogItemsType{catalogTypeID}Brand{catalogBrandID}_pageIndex = 0
+
+
+GET {{baseUrl}}/api/v1/Catalog/items/type/{{GetApiV1CatalogItemsType{catalogTypeID}Brand{catalogBrandID}_catalogTypeID}}/brand/{{GetApiV1CatalogItemsType{catalogTypeID}Brand{catalogBrandID}_catalogBrandID}}
+Content-Type: {{contentType}}
+
+
+########################################################################
+### Request: GET /api/v1/Catalog/items/type/all/brand/{catalogBrandID}
+########################################################################
+
+### Path Parameter: GetApiV1CatalogItemsTypeAllBrand{catalogBrandID}_catalogBrandID
+@GetApiV1CatalogItemsTypeAllBrand{catalogBrandID}_catalogBrandID = 0
+
+### Query Parameter: GetApiV1CatalogItemsTypeAllBrand{catalogBrandID}_pageSize
+@GetApiV1CatalogItemsTypeAllBrand{catalogBrandID}_pageSize = 0
+
+### Query Parameter: GetApiV1CatalogItemsTypeAllBrand{catalogBrandID}_pageIndex
+@GetApiV1CatalogItemsTypeAllBrand{catalogBrandID}_pageIndex = 0
+
+
+GET {{baseUrl}}/api/v1/Catalog/items/type/all/brand/{{GetApiV1CatalogItemsTypeAllBrand{catalogBrandID}_catalogBrandID}}
+Content-Type: {{contentType}}
+
+
+########################################
+### Request: GET /api/v1/Catalog/types
+########################################
+
+
+GET {{baseUrl}}/api/v1/Catalog/types
+Content-Type: {{contentType}}
+
+
+#########################################
+### Request: GET /api/v1/Catalog/brands
+#########################################
+
+
+GET {{baseUrl}}/api/v1/Catalog/brands
+Content-Type: {{contentType}}
+
+
+##########################################
+### Request: DELETE /api/v1/Catalog/{id}
+##########################################
+
+### Path Parameter: DeleteApiV1Catalog{id}_id
+@DeleteApiV1Catalog{id}_id = 0
+
+
+DELETE {{baseUrl}}/api/v1/Catalog/{{DeleteApiV1Catalog{id}_id}}
+Content-Type: {{contentType}}
+
+
+############################################################
+### Request: GET /api/v1/catalog/items/{catalogItemID}/pic
+############################################################
+
+### Path Parameter: GetApiV1CatalogItems{catalogItemID}Pic_catalogItemID
+@GetApiV1CatalogItems{catalogItemID}Pic_catalogItemID = 0
+
+
+GET {{baseUrl}}/api/v1/catalog/items/{{GetApiV1CatalogItems{catalogItemID}Pic_catalogItemID}}/pic
+Content-Type: {{contentType}}
+
+

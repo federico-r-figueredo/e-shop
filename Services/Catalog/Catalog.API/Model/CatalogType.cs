@@ -1,7 +1,7 @@
 
 namespace eShop.Services.Catalog.API.Model {
-    internal class CatalogType {
-        internal int ID { get; set; }
-        internal string Type { get; set; }
+    public class CatalogType {
+        public int ID { get; set; }
+        public string Type { get; set; }
     }
 }
