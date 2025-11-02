@@ -1,0 +1,12 @@
+services:
+    catalog-api:
+        build:
+            context: .
+            dockerfile: Services/Catalog/Catalog.API/Dockerfile
+        depends_on:
+            - catalog-sqlserver
+            - rabbitmq
+    catalog-sqlserver:
+        image: mcr.microsoft.com/mssql/server:2017-latest
+    rabbitmq:
+        image: rabbitmq:4-management-alpine

@@ -22,3 +22,12 @@ docker container run -it --name catalog-api `
     --network catalog-network `
     -p 5003:5003 -p 7271:7271 `
     catalog-api
+
+# Build all images via Docker Compose
+docker-compose build
+
+# Run all containers via Docker Compose
+docker-compose up
+
+# Remove all containers via Docker Compose
+docker-compose down
