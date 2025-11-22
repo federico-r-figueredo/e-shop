@@ -57,19 +57,36 @@ namespace eShop.BuildingBlocks.EventBusRabbitMQ {
         public async Task<bool> TryConnect() {
             this.logger.LogInformation("RabbitMQ Client is trying to connnect");
 
-            await this.semaphoreSlim.WaitAsync();
+            // fast path: avoid awaiting if already connected
+            if (this.IsConnected) return true;
+
+            await this.semaphoreSlim.WaitAsync().ConfigureAwait(false);
             try {
+                // double-check after acquiring lock
+                if (this.IsConnected) return true;
+
                 AsyncRetryPolicy policy = RetryPolicy.Handle<SocketException>()
                     .Or<BrokerUnreachableException>()
-                    .WaitAndRetryAsync(this.retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), (exception, time) => {
-                        this.logger.LogWarning(exception, "RabbitMQ Client could not connect after {TimeOut}s ({ExceptionMessage})", $"{time.TotalSeconds:n1}", exception.Message);
-                    });
+                    .WaitAndRetryAsync(
+                        this.retryCount,
+                        retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+                        (exception, time) => {
+                            this.logger.LogWarning(
+                                exception,
+                                "RabbitMQ Client could not connect after {TimeOut}s ({ExceptionMessage})",
+                                $"{time.TotalSeconds:n1}",
+                                exception.Message
+                            );
+                        }
+                    );
 
                 await policy.ExecuteAsync(async () => {
+                    // this will only run inside the lock, and only be the first waiter
                     this.connection = await this.connectionFactory.CreateConnectionAsync();
                 });
 
                 if (this.IsConnected) {
+                    // subscribe handlers once
                     this.connection.ConnectionShutdownAsync += this.OnConnectionShutdownAsync;
                     this.connection.CallbackExceptionAsync += this.OnCallbackExceptionAsync;
                     this.connection.ConnectionBlockedAsync += this.OnConnectionBlockedAsync;

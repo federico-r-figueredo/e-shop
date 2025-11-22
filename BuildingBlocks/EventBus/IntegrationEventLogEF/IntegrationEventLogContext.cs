@@ -2,6 +2,7 @@
 
 namespace eShop.BuildingBlocks.IntegrationEventLogEF {
     public class IntegrationEventLogContext : DbContext {
+        public const string DEFAULT_SCHEMA = "Integration";
         public IntegrationEventLogContext(DbContextOptions<IntegrationEventLogContext> options)
             : base(options) { }
 

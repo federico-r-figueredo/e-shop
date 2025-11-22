@@ -1,14 +1,15 @@
+using System.Threading.Tasks;
 using eShop.BuildingBlocks.EventBus.Events;
 
 namespace eShop.BuildingBlocks.EventBus.Abstractions {
     public interface IEventBus {
-        void Publish(IntegrationEvent integrationEvent);
+        Task PublishAsync(IntegrationEvent integrationEvent);
 
-        void Subscribe<TIntegrationEvent, TIntegrationEventHandler>()
+        Task SubscribeAsync<TIntegrationEvent, TIntegrationEventHandler>()
             where TIntegrationEvent : IntegrationEvent
             where TIntegrationEventHandler : IIntegrationEventHandler<TIntegrationEvent>;
 
-        void SubscribeDynamic<TIntegrationEventHandler>(string eventName)
+        Task SubscribeDynamicAsync<TIntegrationEventHandler>(string eventName)
             where TIntegrationEventHandler : IDynamicIntegrationEventHandler;
 
         void Unsubscribe<TIntegrationEvent, TIntegrationEventHandler>()

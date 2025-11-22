@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using eShop.BuildingBlocks.EventBus;
@@ -30,6 +31,7 @@ namespace eShop.BuildingBlocks.EventBusRabbitMQ {
 
         private IChannel consumerChannel;
         private string queueName;
+        private readonly SemaphoreSlim subscriptionLock = new SemaphoreSlim(1, 1);
 
         public EventBusRabbitMQ(IRabbitMQPersistentConnection persistentConnection,
             ILogger<EventBusRabbitMQ> logger, ILifetimeScope autofac,
@@ -63,7 +65,7 @@ namespace eShop.BuildingBlocks.EventBusRabbitMQ {
             }
         }
 
-        public async void Publish(IntegrationEvent integrationEvent) {
+        public async Task PublishAsync(IntegrationEvent integrationEvent) {
             if (!this.persistentConnection.IsConnected) {
                 await this.persistentConnection.TryConnect();
             }
@@ -75,7 +77,8 @@ namespace eShop.BuildingBlocks.EventBusRabbitMQ {
                         exception,
                         "Could not publish event: {EventID} after {Timeout}s ({ExceptionMessage})",
                         integrationEvent.ID,
-                        $"{time.TotalSeconds:n1}"
+                        $"{time.TotalSeconds:n1}",
+                        exception
                     );
                 });
 
@@ -112,36 +115,41 @@ namespace eShop.BuildingBlocks.EventBusRabbitMQ {
             }
         }
 
-        public async void Subscribe<TIntegrationEvent, TIntegrationEventHandler>()
+        public async Task SubscribeAsync<TIntegrationEvent, TIntegrationEventHandler>()
             where TIntegrationEvent : IntegrationEvent
             where TIntegrationEventHandler : IIntegrationEventHandler<TIntegrationEvent> {
-            string eventName = this.subscriptionsManager.GetEventKey<TIntegrationEvent>();
-            this.DoInternalSubscription(eventName);
+            await this.subscriptionLock.WaitAsync();
+            try {
+                string eventName = this.subscriptionsManager.GetEventKey<TIntegrationEvent>();
+                await this.DoInternalSubscription(eventName);
 
-            this.logger.LogInformation(
-                "Subscribing to event {EventName} with {EventHandler}",
-                eventName,
-                typeof(TIntegrationEventHandler).GetGenericTypeName()
-            );
+                this.logger.LogInformation(
+                    "Subscribing to event {EventName} with {EventHandler}",
+                    eventName,
+                    typeof(TIntegrationEventHandler).GetGenericTypeName()
+                );
 
-            this.subscriptionsManager.AddSubscription<TIntegrationEvent, TIntegrationEventHandler>();
-            await this.StartBasicConsumeAsync();
+                this.subscriptionsManager.AddSubscription<TIntegrationEvent, TIntegrationEventHandler>();
+                await this.StartBasicConsumeAsync();
+            } finally {
+                this.subscriptionLock.Release();
+            }
         }
 
-        public async void SubscribeDynamic<TIntegrationEventHandler>(string eventName) where TIntegrationEventHandler : IDynamicIntegrationEventHandler {
+        public async Task SubscribeDynamicAsync<TIntegrationEventHandler>(string eventName) where TIntegrationEventHandler : IDynamicIntegrationEventHandler {
             this.logger.LogInformation(
                 "Subscribing to dynamic event {EventName} with {EventHandler}",
                 eventName,
                 typeof(TIntegrationEventHandler).GetGenericTypeName()
             );
 
-            this.DoInternalSubscription(eventName);
+            await this.DoInternalSubscription(eventName);
 
             this.subscriptionsManager.AddDynamicSubscription<TIntegrationEventHandler>(eventName);
             await this.StartBasicConsumeAsync();
         }
 
-        private async void DoInternalSubscription(string eventName) {
+        private async Task DoInternalSubscription(string eventName) {
             bool containsKey = this.subscriptionsManager.HasSubscriptionsForEvent(eventName);
             if (!containsKey) {
                 if (!this.persistentConnection.IsConnected) {
@@ -223,7 +231,7 @@ namespace eShop.BuildingBlocks.EventBusRabbitMQ {
             this.logger.LogTrace("Starting RabbitMQ basic consume");
 
             if (this.consumerChannel == null) {
-                this.consumerChannel = await CreateConsumerChannelAsync();
+                this.consumerChannel = await this.CreateConsumerChannelAsync();
             }
 
             if (this.consumerChannel == null) {
