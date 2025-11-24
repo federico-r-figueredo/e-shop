@@ -1,6 +1,9 @@
+using System.IO;
+using eShop.Services.Basket.API.Extensions;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 
 namespace eShop.Services.Basket.API {
     public static class Program {
@@ -13,13 +16,16 @@ namespace eShop.Services.Basket.API {
             get { return applicationName; }
         }
 
-        public static void Main(string[] args) {
-            CreateWebHostBuilder(args).Build().Run();
+        public static void Main(string[] arguments) {
+            CreateWebHost(arguments).Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) {
+        public static IWebHost CreateWebHost(string[] args) {
             return WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+                .ConfigureAzureKeyVault()
+                .CaptureStartupErrors(false)
+                .UseStartup<Startup>()
+                .Build();
         }
     }
 }
