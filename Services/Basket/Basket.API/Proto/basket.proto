@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package BasketAPI;
+
+service Basket {
+    rpc GetBasketByID(GetBasketRequest) returns (CustomerBasketResponse) { }
+    rpc UpdateCustomerBasket(UpdateCustomerBasketRequest) returns (CustomerBasketResponse) { }
+}
+
+message GetBasketRequest {
+    string id = 1;
+}
+
+message UpdateCustomerBasketRequest {
+    string buyerID = 1;
+    repeated BasketItem items = 2;
+}
+
+message CustomerBasketResponse {
+    string buyerID = 1;
+    repeated BasketItem items = 2;
+}
+
+message BasketItem {
+    string id = 1;
+    int32 productID = 2;
+    string productName = 3;
+    double unitPrice = 4;
+    double oldUnitPrice = 5;
+    int32 quantity = 6;
+    string pictureURL = 7;
+}

@@ -159,6 +159,13 @@ namespace eShop.Services.Basket.API.Extensions {
             return services;
         }
 
+        internal static IServiceCollection AddRPC(this IServiceCollection services,
+            IConfiguration configuration) {
+            services.AddGrpc();
+
+            return services;
+        }
+
         internal static IServiceProvider AddAutofacModules(this IServiceCollection services,
             IConfiguration configuration) {
             ContainerBuilder containerBuilder = new ContainerBuilder();

@@ -1,6 +1,7 @@
 using System;
 using eShop.BuildingBlocks.EventBus.Abstractions;
 using eShop.Services.Basket.API.Extensions;
+using eShop.Services.Basket.API.gRPC;
 using eShop.Services.Basket.API.IntegrationEvents.Events;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -21,6 +22,7 @@ namespace eShop.Services.Basket.API {
         public IServiceProvider ConfigureServices(IServiceCollection services) {
             return services.AddMVC(this.configuration)
                 .AddOptions(this.configuration)
+                .AddRPC(this.configuration)
                 .AddRedis(this.configuration)
                 .AddSwagger(this.configuration)
                 .AddRabbitMQ(this.configuration)
@@ -48,6 +50,7 @@ namespace eShop.Services.Basket.API {
             builder.UseAuthorization();
             builder.UseEndpoints(endpoints => {
                 endpoints.MapControllers();
+                endpoints.MapGrpcService<BasketService>();
             });
 
             IEventBus eventBus = builder.ApplicationServices.GetRequiredService<IEventBus>();
