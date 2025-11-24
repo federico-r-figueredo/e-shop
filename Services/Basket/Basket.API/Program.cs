@@ -23,6 +23,7 @@ namespace eShop.Services.Basket.API {
         public static IWebHost CreateWebHost(string[] args) {
             return WebHost.CreateDefaultBuilder(args)
                 .ConfigureAzureKeyVault()
+                .ConfigurePortsFromConfig()
                 .CaptureStartupErrors(false)
                 .UseStartup<Startup>()
                 .Build();
