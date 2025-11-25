@@ -1,9 +1,7 @@
-using System.IO;
 using eShop.Services.Basket.API.Extensions;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 
 namespace eShop.Services.Basket.API {
     public static class Program {
@@ -22,9 +20,10 @@ namespace eShop.Services.Basket.API {
 
         public static IWebHost CreateWebHost(string[] args) {
             return WebHost.CreateDefaultBuilder(args)
-                .ConfigureAzureKeyVault()
-                .ConfigurePortsFromConfig()
                 .CaptureStartupErrors(false)
+                .ConfigurePortsFromConfig()
+                .ConfigureAzureKeyVault()
+                .UseFailing()
                 .UseStartup<Startup>()
                 .Build();
         }

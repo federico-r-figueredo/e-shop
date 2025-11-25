@@ -9,11 +9,13 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 namespace eShop.Services.Basket.API.Extensions {
     internal static class WebHostBuilderExtensions {
-        internal static IWebHostBuilder UseFailing(this IWebHostBuilder builder,
-            Action<FailingOptions> options) {
+        internal static IWebHostBuilder UseFailing(this IWebHostBuilder builder) {
 
             builder.ConfigureServices(services => {
-                services.AddSingleton<IStartupFilter>(new FailingStartupFilter(options));
+                services.AddSingleton<IStartupFilter>(new FailingStartupFilter(options => {
+                    options.ConfigPath = "Failing";
+                    options.NotFilteredPaths.AddRange(new[] { "health-check", "liveness" });
+                }));
             });
 
             return builder;
