@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 
 namespace eShop.Services.Basket.API.Infrastructure.Options {
-    internal class FailingOptions {
+    public class FailingOptions {
         private string configPath = "/Failing";
 
         public FailingOptions() {

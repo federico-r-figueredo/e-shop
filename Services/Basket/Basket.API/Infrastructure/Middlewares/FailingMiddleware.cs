@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
 namespace eShop.Services.Basket.API.Infrastructure.Middleware {
-    internal class FailingMiddleware {
+    public class FailingMiddleware {
         private readonly RequestDelegate next;
         private bool mustFail;
         private readonly FailingOptions options;
@@ -21,7 +21,7 @@ namespace eShop.Services.Basket.API.Infrastructure.Middleware {
             this.logger = logger;
         }
 
-        internal async Task Invoke(HttpContext httpContext) {
+        public async Task Invoke(HttpContext httpContext) {
             string resourcePath = httpContext.Request.Path;
             if (resourcePath.Equals(this.options.ConfigPath, StringComparison.OrdinalIgnoreCase)) {
                 await this.ProcessConfigRequest(httpContext);
