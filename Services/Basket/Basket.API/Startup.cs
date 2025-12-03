@@ -27,6 +27,7 @@ namespace eShop.Services.Basket.API {
                 .AddSwagger(this.configuration)
                 .AddRabbitMQ(this.configuration)
                 .AddIntegrationEventHandlers(this.configuration)
+                .AddCORSPolicy(this.configuration)
                 .AddHTTPContextAccessor(this.configuration)
                 .AddRepositories(this.configuration)
                 .AddIdentityService(this.configuration)

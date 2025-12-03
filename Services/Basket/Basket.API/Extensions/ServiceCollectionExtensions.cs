@@ -166,6 +166,21 @@ namespace eShop.Services.Basket.API.Extensions {
             return services;
         }
 
+        internal static IServiceCollection AddCORSPolicy(this IServiceCollection services,
+            IConfiguration configuration) {
+
+            services.AddCors(options => {
+                options.AddPolicy("CorsPolicy", builder => {
+                    builder.SetIsOriginAllowed((host) => true)
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials();
+                });
+            });
+
+            return services;
+        }
+
         internal static IServiceProvider AddAutofacModules(this IServiceCollection services,
             IConfiguration configuration) {
             ContainerBuilder containerBuilder = new ContainerBuilder();
