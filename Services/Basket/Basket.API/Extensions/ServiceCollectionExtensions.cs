@@ -1,12 +1,13 @@
-
 using System;
 using System.IO;
 using System.Reflection;
+using System.Text.Json.Serialization;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using eShop.BuildingBlocks.EventBus;
 using eShop.BuildingBlocks.EventBus.Abstractions;
 using eShop.BuildingBlocks.EventBusRabbitMQ;
+using eShop.Services.Basket.API.Infrastructure.Filters;
 using eShop.Services.Basket.API.Infrastructure.Repositories;
 using eShop.Services.Basket.API.IntegrationEvents.Events;
 using eShop.Services.Basket.API.Model;
@@ -26,7 +27,12 @@ namespace eShop.Services.Basket.API.Extensions {
         internal static IServiceCollection AddMVC(this IServiceCollection services,
             IConfiguration configuration) {
             services.AddControllers(options => {
+                options.Filters.Add(typeof(HTTPGlobalExceptionFilter));
+                options.Filters.Add(typeof(ValidateModelStateFilter));
                 options.SuppressAsyncSuffixInActionNames = true;
+            })
+            .AddJsonOptions(options => {
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });
 
             return services;
