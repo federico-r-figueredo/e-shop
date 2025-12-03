@@ -167,7 +167,9 @@ namespace eShop.Services.Basket.API.Extensions {
 
         internal static IServiceCollection AddRPC(this IServiceCollection services,
             IConfiguration configuration) {
-            services.AddGrpc();
+            services.AddGrpc(options => {
+                options.EnableDetailedErrors = true;
+            });
 
             return services;
         }
