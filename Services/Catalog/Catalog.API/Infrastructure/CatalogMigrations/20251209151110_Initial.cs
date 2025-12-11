@@ -5,6 +5,9 @@ namespace Catalog.API.Infrastructure.CatalogMigrations {
     public partial class Initial : Migration {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder) {
+            migrationBuilder.EnsureSchema(
+                name: "Catalog");
+
             migrationBuilder.CreateSequence(
                 name: "catalog_brands_hilo",
                 incrementBy: 10);
@@ -19,6 +22,7 @@ namespace Catalog.API.Infrastructure.CatalogMigrations {
 
             migrationBuilder.CreateTable(
                 name: "CatalogBrands",
+                schema: "Catalog",
                 columns: table => new {
                     ID = table.Column<int>(type: "int", nullable: false),
                     Brand = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
@@ -29,6 +33,7 @@ namespace Catalog.API.Infrastructure.CatalogMigrations {
 
             migrationBuilder.CreateTable(
                 name: "CatalogTypes",
+                schema: "Catalog",
                 columns: table => new {
                     ID = table.Column<int>(type: "int", nullable: false),
                     Type = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
@@ -39,6 +44,7 @@ namespace Catalog.API.Infrastructure.CatalogMigrations {
 
             migrationBuilder.CreateTable(
                 name: "CatalogItems",
+                schema: "Catalog",
                 columns: table => new {
                     ID = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
@@ -57,12 +63,14 @@ namespace Catalog.API.Infrastructure.CatalogMigrations {
                     table.ForeignKey(
                         name: "FK_CatalogItems_CatalogBrands_CatalogBrandID",
                         column: x => x.CatalogBrandID,
+                        principalSchema: "Catalog",
                         principalTable: "CatalogBrands",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_CatalogItems_CatalogTypes_CatalogTypeID",
                         column: x => x.CatalogTypeID,
+                        principalSchema: "Catalog",
                         principalTable: "CatalogTypes",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
@@ -70,11 +78,13 @@ namespace Catalog.API.Infrastructure.CatalogMigrations {
 
             migrationBuilder.CreateIndex(
                 name: "IX_CatalogItems_CatalogBrandID",
+                schema: "Catalog",
                 table: "CatalogItems",
                 column: "CatalogBrandID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CatalogItems_CatalogTypeID",
+                schema: "Catalog",
                 table: "CatalogItems",
                 column: "CatalogTypeID");
         }
@@ -82,13 +92,16 @@ namespace Catalog.API.Infrastructure.CatalogMigrations {
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder) {
             migrationBuilder.DropTable(
-                name: "CatalogItems");
+                name: "CatalogItems",
+                schema: "Catalog");
 
             migrationBuilder.DropTable(
-                name: "CatalogBrands");
+                name: "CatalogBrands",
+                schema: "Catalog");
 
             migrationBuilder.DropTable(
-                name: "CatalogTypes");
+                name: "CatalogTypes",
+                schema: "Catalog");
 
             migrationBuilder.DropSequence(
                 name: "catalog_brands_hilo");

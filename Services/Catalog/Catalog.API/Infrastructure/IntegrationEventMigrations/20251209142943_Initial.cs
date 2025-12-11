@@ -6,8 +6,12 @@ namespace Catalog.API.Infrastructure.IntegrationEventMigrations {
     public partial class Initial : Migration {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder) {
+            migrationBuilder.EnsureSchema(
+                name: "Integration");
+
             migrationBuilder.CreateTable(
                 name: "IntegrationEventLogs",
+                schema: "Integration",
                 columns: table => new {
                     EventID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     EventTypeName = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -25,7 +29,8 @@ namespace Catalog.API.Infrastructure.IntegrationEventMigrations {
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder) {
             migrationBuilder.DropTable(
-                name: "IntegrationEventLogs");
+                name: "IntegrationEventLogs",
+                schema: "Integration");
         }
     }
 }

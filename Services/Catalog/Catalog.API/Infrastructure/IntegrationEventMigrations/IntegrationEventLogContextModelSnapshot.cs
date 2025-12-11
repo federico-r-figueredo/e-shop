@@ -44,7 +44,7 @@ namespace Catalog.API.Infrastructure.IntegrationEventMigrations {
 
                 b.HasKey("EventID");
 
-                b.ToTable("IntegrationEventLogs");
+                b.ToTable("IntegrationEventLogs", "Integration");
             });
 #pragma warning restore 612, 618
         }
