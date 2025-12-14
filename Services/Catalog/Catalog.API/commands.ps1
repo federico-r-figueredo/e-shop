@@ -1,5 +1,5 @@
 # Create a new migration (CatalogContext)
-dotnet ef migrations add Name --output-dir .\Infrastructure\CatalogMigrations --context CatalogContext
+dotnet ef migrations add Initial --output-dir .\Infrastructure\CatalogMigrations --context CatalogContext
 
 # Apply migrations (CatalogContext)
 dotnet ef database update --context CatalogContext
