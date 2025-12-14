@@ -10,6 +10,7 @@ using eShop.BuildingBlocks.EventBusRabbitMQ;
 using eShop.BuildingBlocks.IntegrationEventLogEF;
 using eShop.BuildingBlocks.IntegrationEventLogEF.Services;
 using eShop.Services.Catalog.API.Infrastructure;
+using eShop.Services.Catalog.API.Infrastructure.Filters;
 using eShop.Services.Catalog.API.IntegrationEvents;
 using eShop.Services.Catalog.API.IntegrationEvents.EventHandling;
 using eShop.Services.Catalog.API.Settings;
@@ -26,6 +27,7 @@ namespace eShop.Services.Catalog.API.Extensions {
         internal static IServiceCollection AddMVC(this IServiceCollection services,
             IConfiguration configuration) {
             services.AddControllers(options => {
+                options.Filters.Add(typeof(HTTPGlobalExceptionFilter));
                 options.SuppressAsyncSuffixInActionNames = true;
             });
 
@@ -106,6 +108,7 @@ namespace eShop.Services.Catalog.API.Extensions {
 
         internal static IServiceCollection AddEventBus(this IServiceCollection services,
             IConfiguration configuration) {
+
             services.AddSingleton<IRabbitMQPersistentConnection>(x => {
                 CatalogSettings settings = x.GetRequiredService<IOptions<CatalogSettings>>().Value;
                 ILogger<DefaultRabbitMQPersistentConnection> logger =
@@ -130,6 +133,9 @@ namespace eShop.Services.Catalog.API.Extensions {
 
                 return new DefaultRabbitMQPersistentConnection(factory, logger, retryCount);
             });
+
+            services.AddSingleton<IEventBusSubscriptionManager, InMemoryEventBusSubscriptionManager>();
+
             services.AddSingleton<IEventBus, EventBusRabbitMQ>(serviceProvider => {
                 IRabbitMQPersistentConnection connection = serviceProvider.GetRequiredService<IRabbitMQPersistentConnection>();
                 ILifetimeScope lifetimeScope = serviceProvider.GetRequiredService<ILifetimeScope>();
@@ -147,8 +153,8 @@ namespace eShop.Services.Catalog.API.Extensions {
                 );
             });
 
-            services.AddSingleton<IEventBusSubscriptionManager, InMemoryEventBusSubscriptionManager>();
-            services.AddTransient<ProductPriceChangedIntegrationEventHandler>();
+            services.AddSingleton<OrderStatusChangedToAwaitingValidationIntegrationEventHandler>();
+            services.AddSingleton<OrderStatusChangedToPaidIntegrationEventHandler>();
 
             return services;
         }
