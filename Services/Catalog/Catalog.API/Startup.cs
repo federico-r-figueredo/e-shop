@@ -1,9 +1,6 @@
 using System;
-using eShop.BuildingBlocks.EventBus.Abstractions;
 using eShop.Services.Catalog.API.Controllers.gRPC;
 using eShop.Services.Catalog.API.Extensions;
-using eShop.Services.Catalog.API.IntegrationEvents.EventHandling;
-using eShop.Services.Catalog.API.IntegrationEvents.Events;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -45,13 +42,12 @@ namespace eShop.Services.Catalog.API {
 
             app.UseAuthorization();
 
+            app.ConfigureEventBus();
+
             app.UseEndpoints(endpoints => {
                 endpoints.MapControllers();
                 endpoints.MapGrpcService<CatalogService>();
             });
-
-            IEventBus eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
-            eventBus.Subscribe<ProductPriceChangedIntegrationEvent, ProductPriceChangedIntegrationEventHandler>();
         }
     }
 }

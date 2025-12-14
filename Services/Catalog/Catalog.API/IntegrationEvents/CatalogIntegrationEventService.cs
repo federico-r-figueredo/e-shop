@@ -40,7 +40,7 @@ namespace eShop.Services.Catalog.API.IntegrationEvents {
                 );
 
                 await this.eventLogService.MarkEventAsInProgressAsync(integrationEvent.ID);
-                this.eventBus.Publish(integrationEvent);
+                await this.eventBus.PublishAsync(integrationEvent);
                 await this.eventLogService.MarkEventAsPublishedAsync(integrationEvent.ID);
             } catch (Exception exception) {
                 this.logger.LogError(exception, @"ERROR Publishing integration event: 
