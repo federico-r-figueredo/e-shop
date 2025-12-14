@@ -39,7 +39,7 @@ namespace Catalog.API.Infrastructure.CatalogMigrations {
 
                 b.HasKey("ID");
 
-                b.ToTable("CatalogBrands");
+                b.ToTable("CatalogBrands", "Catalog");
             });
 
             modelBuilder.Entity("eShop.Services.Catalog.API.Model.CatalogItem", b => {
@@ -88,7 +88,7 @@ namespace Catalog.API.Infrastructure.CatalogMigrations {
 
                 b.HasIndex("CatalogTypeID");
 
-                b.ToTable("CatalogItems");
+                b.ToTable("CatalogItems", "Catalog");
             });
 
             modelBuilder.Entity("eShop.Services.Catalog.API.Model.CatalogType", b => {
@@ -105,7 +105,7 @@ namespace Catalog.API.Infrastructure.CatalogMigrations {
 
                 b.HasKey("ID");
 
-                b.ToTable("CatalogTypes");
+                b.ToTable("CatalogTypes", "Catalog");
             });
 
             modelBuilder.Entity("eShop.Services.Catalog.API.Model.CatalogItem", b => {

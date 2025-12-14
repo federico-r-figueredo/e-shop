@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace eShop.Services.Catalog.API.Infrastructure.EntityConfigurations {
     internal class CatalogItemEntityTypeConfiguration : IEntityTypeConfiguration<CatalogItem> {
         public void Configure(EntityTypeBuilder<CatalogItem> builder) {
+            builder.ToTable("CatalogItems", CatalogContext.DEFAULT_SCHEMA);
+
             builder.Property(x => x.ID)
                 .UseHiLo("catalog_items_hilo")
                 .IsRequired();
