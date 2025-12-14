@@ -9,7 +9,7 @@ using eShop.BuildingBlocks.IntegrationEventLogEF;
 
 namespace Catalog.API.Infrastructure.IntegrationEventMigrations {
     [DbContext(typeof(IntegrationEventLogContext))]
-    [Migration("20251017141640_Initial")]
+    [Migration("20251209142943_Initial")]
     partial class Initial {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder) {
@@ -47,7 +47,7 @@ namespace Catalog.API.Infrastructure.IntegrationEventMigrations {
 
                 b.HasKey("EventID");
 
-                b.ToTable("IntegrationEventLogs");
+                b.ToTable("IntegrationEventLogs", "Integration");
             });
 #pragma warning restore 612, 618
         }
