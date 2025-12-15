@@ -14,7 +14,10 @@ namespace eShop.Services.Ordering.Domain.SeedWork {
 
         public virtual int ID {
             get { return this.id; }
-            protected set { this.id = value; }
+            // This private setter is required so EF Core design time tools won't fail with
+            // "No backing field could be found for property '<EntityChild>.ID' and 
+            // the property does not have a setter".
+            private set { this.id = value; }
         }
 
         public IReadOnlyCollection<INotification> DomainEvents {

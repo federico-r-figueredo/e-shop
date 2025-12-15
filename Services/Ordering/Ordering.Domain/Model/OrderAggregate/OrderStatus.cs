@@ -13,6 +13,10 @@ namespace eShop.Services.Ordering.Domain.Model.OrderAggregate {
         public static OrderStatus Shipped = new OrderStatus(1, nameof(Shipped).ToLowerInvariant());
         public static OrderStatus Cancelled = new OrderStatus(1, nameof(Cancelled).ToLowerInvariant());
 
+        // This parameterless constructor is required so EF Core Design Time tools won't
+        // fail with "No suitable constructor was found for entity type 'OrderStatus'"
+        private OrderStatus() : base(default(int), default(string)) { }
+
         protected OrderStatus(int id, string name) : base(id, name) { }
 
         public static IEnumerable<OrderStatus> List() {

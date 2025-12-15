@@ -15,6 +15,10 @@ namespace eShop.Services.Ordering.Domain.SeedWork {
 
         public int ID {
             get { return this.id; }
+            // This private setter is required so EF Core design time tools won't fail with
+            // "No backing field could be found for property '<EnumerationChild>.ID' and 
+            // the property does not have a setter".
+            private set { this.id = value; }
         }
 
         public string Name {

@@ -11,6 +11,10 @@ namespace eShop.Services.Ordering.Domain.Model.BuyerAggregate {
         public static CardType Visa = new CardType(2, "Visa");
         public static CardType MasterCard = new CardType(3, "MasterCard");
 
+        // This parameterless constructor is required so EF Core Design Time tools won't
+        // fail with "No suitable constructor was found for entity type 'CardType'"
+        private CardType() : base(default(int), default(string)) { }
+
         public CardType(int id, string name) : base(id, name) { }
     }
 }
