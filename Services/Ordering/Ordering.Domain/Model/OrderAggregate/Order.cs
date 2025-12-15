@@ -68,6 +68,12 @@ namespace eShop.Services.Ordering.Domain.Model.OrderAggregate {
             ));
         }
 
+        public static Order NewDraft() {
+            return new Order {
+                isDraft = true
+            };
+        }
+
         public Address Address {
             get { return this.address; }
         }
