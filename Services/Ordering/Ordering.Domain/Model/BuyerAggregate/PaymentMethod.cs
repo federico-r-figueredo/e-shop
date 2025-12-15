@@ -27,6 +27,7 @@ namespace eShop.Services.Ordering.Domain.Model.BuyerAggregate {
             this.cardHolderName = cardHolderName;
             this.expirationDate = expirationDate;
             this.cardTypeID = cardTypeID;
+            this.cardType = CardType.FromValue<CardType>(this.cardTypeID);
         }
 
         public CardType CardType {
