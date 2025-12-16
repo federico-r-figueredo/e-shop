@@ -1,12 +1,30 @@
 services:
+    ordering-api:
+        build:
+            context: .
+            dockerfile: Services/Ordering/Ordering.API/Dockerfile
+        depends_on:
+            - ordering-sqlserver
+            - rabbitmq
     catalog-api:
         build:
             context: .
             dockerfile: Services/Catalog/Catalog.API/Dockerfile
         depends_on:
-            - catalog-sqlserver
+            - ordering-sqlserver
             - rabbitmq
+    basket-api:
+        build:
+            context: .
+            dockerfile: Services/Basket/Basket.API/Dockerfile
+        depends_on:
+            - basket-redis
+            - rabbitmq
+    ordering-sqlserver:
+        image: mcr.microsoft.com/mssql/server:2017-latest
     catalog-sqlserver:
         image: mcr.microsoft.com/mssql/server:2017-latest
+    basket-redis:
+        image: redis/redis-stack:latest
     rabbitmq:
         image: rabbitmq:4-management-alpine
