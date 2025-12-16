@@ -1,3 +1,9 @@
+using System;
+using eShop.BuildingBlocks.EventBus.Abstractions;
+using eShop.Services.Ordering.API.Application.IntegrationEvents.EventHandling;
+using eShop.Services.Ordering.API.Application.IntegrationEvents.Events;
+using eShop.Services.Ordering.API.Extensions;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -14,20 +20,29 @@ namespace eShop.Services.Ordering.API {
 
         // This method gets called by the runtime. Use this method to add services to the
         // IoC container.
-        public void ConfigureServices(IServiceCollection services) {
-            services.AddControllers();
-            services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
+        public IServiceProvider ConfigureServices(IServiceCollection services) {
+            services.AddMediatR(typeof(Startup).Assembly);
+
+            return services.AddMVC(this.configuration)
+                .AddSwagger(this.configuration)
+                .AddOptions(this.configuration)
+                .AddEventBus(this.configuration)
+                .AddIntegrationEventHandlers(this.configuration)
+                .AddIntegrationEventServices(this.configuration)
+                .AddAutofacModules(this.configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTPS
         // request processing pipeline.
-        public void Configure(IApplicationBuilder applcation, IWebHostEnvironment environment) {
+        public async void Configure(IApplicationBuilder applcation, IWebHostEnvironment environment) {
             // Configure the HTTP request pipeline.
             if (environment.IsDevelopment()) {
                 applcation.UseDeveloperExceptionPage();
                 applcation.UseSwagger();
-                applcation.UseSwaggerUI();
+                applcation.UseSwaggerUI(options => {
+                    options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+                    options.RoutePrefix = string.Empty;
+                });
             }
 
             applcation.UseRouting();
@@ -35,6 +50,9 @@ namespace eShop.Services.Ordering.API {
             applcation.UseEndpoints(endpoints => {
                 endpoints.MapControllers();
             });
+
+            IEventBus eventBus = applcation.ApplicationServices.GetRequiredService<IEventBus>();
+            await eventBus.SubscribeAsync<UserCheckoutAcceptedIntegrationEvent, UserCheckoutAcceptedIntegrationEventHandler>();
         }
     }
 }
