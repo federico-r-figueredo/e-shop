@@ -23,7 +23,6 @@ namespace eShop.Services.Ordering.Domain.Model.OrderAggregate {
         private int? paymentMethodID;
 
         private int orderStatusID;
-        private OrderStatus orderStatus;
         private string description;
 
         // Draft orders have this set to true. Currently we don't check anywhere the draft
@@ -46,11 +45,12 @@ namespace eShop.Services.Ordering.Domain.Model.OrderAggregate {
             string cardNumber, string cardSecurityNumber, string cardHolderName,
             DateTime cardExpirationDate, int? buyerID = null, int? paymentMethodID = null) : this() {
 
+            this.address = address;
             this.buyerID = buyerID;
             this.paymentMethodID = paymentMethodID;
+
             this.orderStatusID = OrderStatus.Submitted.ID;
             this.orderDate = DateTime.UtcNow;
-            this.address = address;
 
             // DDD Patterns comment:
             // Add the OrderStartedDomainEvent to the domain events collection to be
@@ -83,7 +83,7 @@ namespace eShop.Services.Ordering.Domain.Model.OrderAggregate {
         }
 
         public OrderStatus OrderStatus {
-            get { return this.orderStatus; }
+            get { return OrderStatus.FromID(this.orderStatusID); }
         }
 
         public IReadOnlyCollection<OrderItem> OrderItems {
