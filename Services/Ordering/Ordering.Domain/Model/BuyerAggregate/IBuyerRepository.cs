@@ -6,7 +6,7 @@ namespace eShop.Services.Ordering.Domain.Model.BuyerAggregate {
     // the Buyer Aggregate
     public interface IBuyerRepository : IRepository<Buyer> {
         Buyer Add(Buyer buyer);
-        void Update(Buyer buyer);
+        Buyer Update(Buyer buyer);
         Task<Buyer> GetByIDAsync(string id);
         Task<Buyer> GetByGUIDAsync(string guid);
     }

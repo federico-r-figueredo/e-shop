@@ -37,8 +37,9 @@ namespace eShop.Services.Ordering.Infrastructure.Repositories {
                 .SingleOrDefaultAsync();
         }
 
-        public void Update(Buyer buyer) {
+        public Buyer Update(Buyer buyer) {
             this.context.Entry(buyer).State = EntityState.Modified;
+            return buyer;
         }
     }
 }
