@@ -103,7 +103,15 @@ namespace eShop.Services.Ordering.Domain.Model.OrderAggregate {
                 .Where(x => x.ProductID == productID)
                 .SingleOrDefault();
 
-            if (existingOrderItem == null) {
+            if (existingOrderItem != null) {
+                // If an existing OrderItem exists for the product, then update it with the
+                // higher discount and units.
+                if (newDiscount > existingOrderItem.CurrentDiscount) {
+                    existingOrderItem.SetNewDiscount(newDiscount);
+                }
+
+                existingOrderItem.AddUnits(units);
+            } else {
                 // Add validated new order item
                 OrderItem newOrderItem = new OrderItem(
                     productID: productID,
@@ -115,14 +123,6 @@ namespace eShop.Services.Ordering.Domain.Model.OrderAggregate {
                 );
                 this.orderItems.Add(newOrderItem);
             }
-
-            // If an existing OrderItem exists for the product, then update it with the
-            // higher discount and units.
-            if (newDiscount > existingOrderItem.CurrentDiscount) {
-                existingOrderItem.SetNewDiscount(newDiscount);
-            }
-
-            existingOrderItem.AddUnits(units);
         }
 
         public void SetPaymentMethodID(int id) {

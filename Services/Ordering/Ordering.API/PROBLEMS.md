@@ -65,3 +65,24 @@ with the actual internal state of the object that returned that snapshot of its 
 ### Solution
 
 The solution was simply to go back to returning IEnumerable<PaymentMethod>.
+
+### Problem #3
+
+### Symptoms
+
+NullReferenceException at line 121 of existingOrderItem.CurrentDiscount in Order::AddOrderItem()
+
+### Root Cause
+
+When copying the conditionals from the reference eShopOnContainers repo I tried to avoid
+conditionals that evaluated negative assertions (like something being not equal to something
+else) because asserting positive conditions is easier to understand. Therefore, I first wrote
+the code that should only execute when a variable is null but forgot to add the code that
+should only execute when that variable is not null inside an else statement. As a consequence,
+that piece of code threw a NullReferenceException when dereferencing that null variable in order
+to access one of that object's properties.
+
+### Solution
+
+Put the code that should only execute when that variable is null inside a conditional that
+evaluates that condition.
