@@ -31,7 +31,7 @@ namespace eShop.Services.Ordering.Domain.Model.BuyerAggregate {
             get { return this.name; }
         }
 
-        public ReadOnlyCollection<PaymentMethod> PaymentMethods {
+        public IEnumerable<PaymentMethod> PaymentMethods {
             get { return this.paymentMethods.AsReadOnly(); }
         }
 
