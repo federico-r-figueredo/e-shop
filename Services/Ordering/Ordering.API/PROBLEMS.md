@@ -70,7 +70,7 @@ The solution was simply to go back to returning IEnumerable<PaymentMethod>.
 
 ### Symptoms
 
-NullReferenceException at line 121 of existingOrderItem.CurrentDiscount in Order::AddOrderItem()
+`NullReferenceException` at existingOrderItem.CurrentDiscount in line 121 of Order::AddOrderItem()
 
 ### Root Cause
 
@@ -86,3 +86,23 @@ to access one of that object's properties.
 
 Put the code that should only execute when that variable is null inside a conditional that
 evaluates that condition.
+
+### Proble #4
+
+### Symptoms
+
+`InvalidOperationException` at List().SingleOrDefault in line 27 of OrderStatus::FromName()
+
+### Root Cause
+
+When writing OrderStatus static fields to represent each of the concrete statuses I
+accidentally forgot to update IDs in an increasing order after copying and pasting the
+first created instance (i.e., `Submitted` status). This lead to invoked IEnumerable::SingleOrDefault()
+method to throw due to several elements (in fact, all of them) fullfilling the imposed
+condition. That is, that the element's ID should be equal to the parameter's value (which
+probably had the value `1` at that point).
+
+### Solution
+
+Replace the IDs of each of the static fields with the increasing values that they were
+meant to be created with (i.e., 1, 2, 3, ..., n).
