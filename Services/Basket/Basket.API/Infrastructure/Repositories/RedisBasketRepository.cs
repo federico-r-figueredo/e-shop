@@ -24,12 +24,24 @@ namespace eShop.Services.Basket.API.Infrastructure.Repositories {
             RedisValue value = await this.database.StringGetAsync(buyerID);
 
             if (value.IsNullOrEmpty) {
+                this.logger.LogInformation(
+                    "Basket with BuyerID = {BuyerID} was not found",
+                    buyerID
+                );
                 return null;
             }
 
-            return JsonSerializer.Deserialize<CustomerBasket>(value, new JsonSerializerOptions() {
-                PropertyNameCaseInsensitive = true
-            });
+            CustomerBasket customerBasket = JsonSerializer.Deserialize<CustomerBasket>(
+                value,
+                new JsonSerializerOptions() { PropertyNameCaseInsensitive = true }
+            );
+
+            this.logger.LogInformation(
+                "Basket with BuyerID = {BuyerID} was found",
+                customerBasket.BuyerID
+            );
+
+            return customerBasket;
         }
 
         public async Task<CustomerBasket> AddOrUpdateBasketAsync(CustomerBasket basket) {
@@ -39,22 +51,31 @@ namespace eShop.Services.Basket.API.Infrastructure.Repositories {
             );
 
             if (!wasCreated) {
-                this.logger.LogInformation(
-                    $"Problem occurred persisting {nameof(CustomerBasket)}" +
-                    $" with BuyerID = {basket.BuyerID}"
+                this.logger.LogError(
+                    "Problem occurred persisting {EntityName} with BuyerID = {BuyerID}",
+                    nameof(CustomerBasket),
+                    basket.BuyerID
                 );
                 return null;
             }
 
             this.logger.LogInformation(
-                $"Basket with BuyerID = {basket.BuyerID} was persisted successfully"
+                "Basket with BuyerID = {BuyerID} was persisted successfully",
+                basket.BuyerID
             );
 
             return await GetBasketAsync(basket.BuyerID);
         }
 
         public async Task<bool> DeleteBasketAsync(string id) {
-            return await this.database.KeyDeleteAsync(id);
+            bool result = await this.database.KeyDeleteAsync(id);
+            if (result) {
+                this.logger.LogInformation("Basket with BuyerID = {BuyerID} was deleted", id);
+            } else {
+                this.logger.LogError("Problem occurred deleting Basket with BuyerID = {BuyerID}", id);
+            }
+
+            return result;
         }
 
         public IEnumerable<string> GetUsers() {
