@@ -69,7 +69,8 @@ namespace eShop.Services.Ordering.API.Application.IntegrationEvents.EventHandlin
                 identifiedCreateOrderCommand
             );
 
-            bool result = await this.mediator.Send(identifiedCreateOrderCommand);
+            // bool result = await this.mediator.Send(identifiedCreateOrderCommand);
+            bool result = await this.mediator.Send(createOrderCommand);
 
             if (result) {
                 this.logger.LogInformation(
