@@ -21,9 +21,8 @@ namespace eShop.Services.Ordering.API {
         // This method gets called by the runtime. Use this method to add services to the
         // IoC container.
         public IServiceProvider ConfigureServices(IServiceCollection services) {
-            services.AddMediatR(typeof(Startup).Assembly);
-
             return services.AddMVC(this.configuration)
+                .AddDBContext(this.configuration)
                 .AddSwagger(this.configuration)
                 .AddOptions(this.configuration)
                 .AddEventBus(this.configuration)

@@ -7,10 +7,13 @@ using Autofac.Extensions.DependencyInjection;
 using eShop.BuildingBlocks.EventBus;
 using eShop.BuildingBlocks.EventBus.Abstractions;
 using eShop.BuildingBlocks.EventBusRabbitMQ;
+using eShop.BuildingBlocks.IntegrationEventLogEF;
 using eShop.BuildingBlocks.IntegrationEventLogEF.Services;
 using eShop.Services.Ordering.API.Application.IntegrationEvents;
 using eShop.Services.Ordering.API.Application.IntegrationEvents.EventHandling;
 using eShop.Services.Ordering.API.Settings;
+using eShop.Services.Ordering.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -24,6 +27,40 @@ namespace eShop.Services.Ordering.API.Extensions {
             IConfiguration configuration) {
             services.AddControllers(options => {
                 options.SuppressAsyncSuffixInActionNames = true;
+            });
+
+            return services;
+        }
+
+        internal static IServiceCollection AddDBContext(this IServiceCollection services,
+            IConfiguration configuration) {
+
+            services.AddDbContext<OrderingContext>(optionsAction => {
+                optionsAction.UseSqlServer(
+                    connectionString: configuration.GetConnectionString("SQLServer"),
+                    sqlServerOptionsAction: action => {
+                        action.MigrationsAssembly(typeof(Startup).Assembly.GetName().Name);
+                        action.EnableRetryOnFailure(
+                            maxRetryCount: 15,
+                            maxRetryDelay: TimeSpan.FromSeconds(30),
+                            errorNumbersToAdd: null
+                        );
+                    }
+                );
+            });
+
+            services.AddDbContext<IntegrationEventLogContext>(optionsAction => {
+                optionsAction.UseSqlServer(
+                    connectionString: configuration.GetConnectionString("SQLServer"),
+                    sqlServerOptionsAction: sqlServerOptionsAction => {
+                        sqlServerOptionsAction.MigrationsAssembly(typeof(Startup).Assembly.GetName().Name);
+                        sqlServerOptionsAction.EnableRetryOnFailure(
+                            maxRetryCount: 15,
+                            maxRetryDelay: TimeSpan.FromSeconds(30),
+                            errorNumbersToAdd: null
+                        );
+                    }
+                );
             });
 
             return services;
