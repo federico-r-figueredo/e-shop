@@ -11,6 +11,7 @@ using eShop.BuildingBlocks.IntegrationEventLogEF;
 using eShop.BuildingBlocks.IntegrationEventLogEF.Services;
 using eShop.Services.Ordering.API.Application.IntegrationEvents;
 using eShop.Services.Ordering.API.Application.IntegrationEvents.EventHandling;
+using eShop.Services.Ordering.API.Infrastructure.AutofacModules;
 using eShop.Services.Ordering.API.Settings;
 using eShop.Services.Ordering.Infrastructure;
 using Microsoft.EntityFrameworkCore;
@@ -169,7 +170,11 @@ namespace eShop.Services.Ordering.API.Extensions {
         internal static IServiceProvider AddAutofacModules(this IServiceCollection services,
             IConfiguration configuration) {
             ContainerBuilder containerBuilder = new ContainerBuilder();
+
             containerBuilder.Populate(services);
+
+            containerBuilder.RegisterModule(new MediatorModule());
+            containerBuilder.RegisterModule(new ApplicationModule(configuration.GetConnectionString("SQLServer")));
 
             return new AutofacServiceProvider(containerBuilder.Build());
         }
