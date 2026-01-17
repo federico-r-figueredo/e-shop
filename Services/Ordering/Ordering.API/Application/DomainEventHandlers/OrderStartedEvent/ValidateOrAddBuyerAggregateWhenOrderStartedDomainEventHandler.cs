@@ -16,16 +16,18 @@ namespace eShop.Services.Ordering.API.Application.DomainEventHandlers.OrderStart
         private readonly ILogger<ValidateOrAddBuyerAggregateWhenOrderStartedDomainEventHandler> logger;
 
         public ValidateOrAddBuyerAggregateWhenOrderStartedDomainEventHandler(
-            IBuyerRepository buyerRepository, IOrderingIntegrationEventService integrationEventService) {
+            IBuyerRepository buyerRepository, IOrderingIntegrationEventService integrationEventService,
+            ILogger<ValidateOrAddBuyerAggregateWhenOrderStartedDomainEventHandler> logger) {
             this.buyerRepository = buyerRepository;
             this.integrationEventService = integrationEventService;
+            this.logger = logger;
         }
 
         public async Task Handle(OrderStartedDomainEvent orderStartedDomainEvent, CancellationToken cancellationToken) {
             int cardTypeID = orderStartedDomainEvent.CardTypeID != 0
                 ? orderStartedDomainEvent.CardTypeID
                 : 1;
-            Buyer buyer = await this.buyerRepository.GetByIDAsync(orderStartedDomainEvent.UserID);
+            Buyer buyer = await this.buyerRepository.GetByGUIDAsync(orderStartedDomainEvent.UserID);
             bool buyerDoesNotExist = buyer == null;
 
             if (buyerDoesNotExist) {
@@ -55,6 +57,7 @@ namespace eShop.Services.Ordering.API.Application.DomainEventHandlers.OrderStart
                     buyer.Name
                 )
             );
+
             this.logger.LogTrace(
                 "Buyer {buyerID} and related payment method were validated or updated for orderID: {orderID}",
                 updatedBuyer.ID,
