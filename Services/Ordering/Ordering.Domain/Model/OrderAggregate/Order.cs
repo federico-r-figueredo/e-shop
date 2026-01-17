@@ -23,6 +23,7 @@ namespace eShop.Services.Ordering.Domain.Model.OrderAggregate {
         private int? paymentMethodID;
 
         private int orderStatusID;
+        private OrderStatus orderStatus;
         private string description;
 
         // Draft orders have this set to true. Currently we don't check anywhere the draft
