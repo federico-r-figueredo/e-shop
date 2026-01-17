@@ -1,26 +1,26 @@
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using MediatR;
 using eShop.BuildingBlocks.EventBus.Abstractions;
 using eShop.Services.Ordering.API.Application.DTOs;
 using eShop.Services.Ordering.API.Application.IntegrationEvents;
 using eShop.Services.Ordering.API.Application.IntegrationEvents.Events;
 using eShop.Services.Ordering.Domain.Model.OrderAggregate;
-using MediatR;
-using Microsoft.Extensions.Logging;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace eShop.Services.Ordering.API.Application.Commands {
     public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, bool> {
         private readonly IOrderRepository orderRepository;
         private readonly IEventBus eventBus;
-        private readonly IOrderingIntegrationEventService integrationEventService;
+        private readonly IOrderingIntegrationEventService orderingIntegrationEventService;
         private readonly ILogger<CreateOrderCommandHandler> logger;
 
         public CreateOrderCommandHandler(IOrderRepository orderRepository, IEventBus eventBus,
-            IOrderingIntegrationEventService integrationEventService,
+            IOrderingIntegrationEventService orderingIntegrationEventService,
             ILogger<CreateOrderCommandHandler> logger) {
             this.orderRepository = orderRepository;
             this.eventBus = eventBus;
-            this.integrationEventService = integrationEventService;
+            this.orderingIntegrationEventService = orderingIntegrationEventService;
             this.logger = logger;
         }
 
@@ -28,9 +28,9 @@ namespace eShop.Services.Ordering.API.Application.Commands {
             CancellationToken cancellationToken) {
 
             // Add integration event to clean the basket
-            OrderStartedIntegrationEvent orderStartedIntegrationEvent =
-                new OrderStartedIntegrationEvent(request.UserID);
-            await this.integrationEventService.AddAndSaveEventAsync(orderStartedIntegrationEvent);
+            await this.orderingIntegrationEventService.AddAndSaveEventAsync(
+                new OrderStartedIntegrationEvent(request.UserID)
+            );
 
             // Add / Update the Order aggregate root
             // DDD patterns comment: Add child entities and value-objects through the Order
