@@ -3,18 +3,24 @@
 Catalog::ProductPriceChangedIntegrationEvent
     -> Basket::ProductPriceChangedIntegrationEventHandler
 
-Basket::UserCheckoutAcceptedIntegrationEvent
-    -> Ordering::UserCheckoutAcceptedIntegrationEventHandler
-        -> Ordering::CreateOrderCommand
-            -> Ordering::CreateOrderCommandHandler
-                -> Ordering::OrderStartedDomainEvent
-                    -> Ordering::SendEmailToCustomerWhenOrderStartedDomainEventHandler
-                    -> Ordering::ValidateOrAddBuyerAggregateWhenOrderStartedDomainEventHandler
-                        -> Ordering::BuyerAndPaymentMethodVerifiedDomainEvent
-                            -> Ordering::UpdateOrderWhenBuyerAndPaymentMethodVerifiedDomainEventHandler
-                        -> Ordering::OrderStatusChangedToSubmittedIntegrationEvent **
-                -> Ordering::OrderStartedIntegrationEvent
-                    -> Basket::OrderStartedIntegrationEventHandler
+Basket::BasketController::CheckoutBasketAsync()
+    Basket::UserCheckoutAcceptedIntegrationEvent
+        -> Ordering::UserCheckoutAcceptedIntegrationEventHandler:Handle()
+            -> Ordering::CreateOrderCommand
+                -> Ordering::CreateOrderCommandHandler::Handle()
+                    -> Order::Order()
+                        -> Ordering::OrderStartedDomainEvent
+                            -> Ordering::SendEmailToCustomerWhenOrderStartedDomainEventHandler::Handle()
+                            -> Ordering::ValidateOrAddBuyerAggregateWhenOrderStartedDomainEventHandler::Handle()
+                                -> Buyer::VerifyOrAddPaymentMethod()
+                                    -> Ordering::BuyerAndPaymentMethodVerifiedDomainEvent
+                                        -> Ordering::UpdateOrderWhenBuyerAndPaymentMethodVerifiedDomainEventHandler::Handle()
+                                -> Ordering::OrderStatusChangedToSubmittedIntegrationEvent **
+                                    -> Ordering.SignalrHub::OrderStatusChangedToSubmittedIntegrationEventHandler::Handle()
+                                        -> Ordering.SignalrHub::UpdatedOrderState
+                                            -> UIClients::UpdatedOrderStateHandler::Handle()
+                    -> Ordering::OrderStartedIntegrationEvent
+                        -> Basket::OrderStartedIntegrationEventHandler::Handle()
 
 Ordering::GracePeriodManagerService
     -> Ordering::GracePeriodConfirmedIntegrationEvent
